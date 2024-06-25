@@ -1,11 +1,11 @@
 import { Router } from "express";
-import userController from '../controllers/userController.ts';
+import apiController from '../controllers/apiController.ts';
 
 
 const router = Router();
 
-router.post( 'api/autorization', userController.autorizationUser );
+router.post( 'api/autorization', apiController.autorizationUser );
 
-router.post( 'api/registration', userController.regUser );
+router.post( 'api/registration', apiController.regUser );
 
 export default router;
