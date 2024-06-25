@@ -1,5 +1,14 @@
 <template></template>
 
-<script></script>
+<script>
+export default {
+    data() {
+
+    },
+    mounted: {
+        
+    }
+}
+</script>
 
 <style></style>
