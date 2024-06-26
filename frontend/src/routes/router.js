@@ -12,7 +12,7 @@ const router = createRouter({
 });
 
 router.beforeEach( (to, from, next) => {
-    document.title = to.meta.title || ' Ошибка!';
+    document.title = to.meta.title || 'Ошибка!';
     next();
 } )
 
