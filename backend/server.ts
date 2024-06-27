@@ -3,9 +3,9 @@ import path from 'path';
 import dotenv from 'dotenv';
 dotenv.config({ path: 'backend/.env' });
 
-import userRouter from './routes/userRouter.ts';
-import apiRouter from './routes/apiRouter.ts';
-import publicRouter from './routes/publicRouter.ts';
+import userRouter from './routes/userRouter';
+import apiRouter from './routes/apiRouter';
+import publicRouter from './routes/publicRouter';
 
 
 const PORT: number = Number( process.env.PORT || 5000 );
