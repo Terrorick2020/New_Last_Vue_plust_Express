@@ -1,6 +1,6 @@
 <template>
     <div class="authorization">
-        <Header />
+        <Header :nav_attr="nav_attr" :btn_name="btn_name" />
         <AuthorizeBody />
         <Footer />
     </div>
@@ -16,7 +16,18 @@ export default {
     components: { Header, AuthorizeBody, Footer },
     data() {
         return {
-
+            nav_attr: [
+                {
+                    name: 'О нас'
+                },
+                {
+                     name: 'Книги'
+                }
+            ],
+            btn_name: {
+                name: 'Главная',
+                path: '/home'
+            }
         }
     }
 }

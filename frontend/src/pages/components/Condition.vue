@@ -17,13 +17,46 @@ export default {}
 </script>
 
 <style lang="scss" scoped>
+$btn-color: rgb(199, 199, 199);
+
 .condition {
     margin-top: 200px;
 
     .condition__conteiner {
 
         button {
+            margin-top: 20px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 8px;
+            background: transparent;
+            width: 208px;
+
+            &:hover {
+                color: $btn-color;
+
+                svg {
+                    margin-left: 40px;
+
+                    path {
+                        fill: $btn-color;
+                    }
+                }
+            }
+
+            p {
+                font-size: 14px;
+            }
             
+            svg {
+                width: 20px;
+                height: auto;
+                margin-left: 20px;
+                transition: all 0.8s ease;
+            }
         }
     }
 }

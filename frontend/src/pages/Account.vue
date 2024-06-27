@@ -1,20 +1,16 @@
 <template>
     <Header :nav_attr="nav_attr" :btn_name="btn_name" />
-    <div class="main">
-        <Info />
-        <Condition />
-        <Footer />
+    <div class="client">
+
     </div>
 </template>
 
 <script>
 import Header from './components/Header.vue';
-import Info from './components/Info.vue';
-import Condition from './components/Condition.vue';
-import Footer from './components/Footer.vue';
+
 
 export default {
-    components: { Header, Info, Condition, Footer },
+    components: { Header },
     data() {
         return {
             nav_attr: [
@@ -25,11 +21,11 @@ export default {
                     name: 'Инфомация'
                 },
                 {
-                     name: 'Книги'
+                    name: 'Книги'
                 }
             ],
             btn_name: {
-                name: 'Авторизация',
+                name: 'Главная',
                 path: '/authorization'
             }
         }
@@ -38,7 +34,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.main {
+.client {
     position: absolute;
     top: 0;
     width: 100%;

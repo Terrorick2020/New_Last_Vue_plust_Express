@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Project Full-Stack technologies!",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "build_dist": "webpack --config frontend/webpack.config.js",
     "start_frontend": "npx webpack serve --config frontend/webpack.config.js",

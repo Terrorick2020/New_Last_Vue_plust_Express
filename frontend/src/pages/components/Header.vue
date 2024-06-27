@@ -5,15 +5,15 @@
                 <img src="" alt="">
             </div>
             <div class="logo__text">
-                <h2>itLab</h2>
+                <h2>MagcikLab</h2>
                 <p>Самый безопасный сайт!</p>
             </div>
         </div>
         <div class="header__navigation">
             <nav class="nav">
                 <a href="#" v-for="(elem, index) in nav_attr">{{ elem.name }}</a>
-                <router-link to="/home" class="routes">
-                    <button>{{ btn_name }}</button>
+                <router-link :to="btn_name.path" class="routes">
+                    <button>{{ btn_name.name }}</button>
                 </router-link>
             </nav>
         </div>

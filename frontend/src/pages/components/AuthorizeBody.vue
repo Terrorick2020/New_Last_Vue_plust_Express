@@ -13,12 +13,17 @@
                     <lable for="user_email" :style="label_email_top">Почта</lable>
                 </div>
                 <div class="input-box">
-                    <span class="icon" v-if="!pswdIsVisible" @click="changeVisible">
+                    <span class="icon lock" v-if="!pswdIsVisible" @click="changeVisible">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                             <path d="M376 186h-20v-40c0-55-45-100-100-100S156 91 156 146v40h-20c-22.002 0-40 17.998-40 40v200c0 22.002 17.998 40 40 40h240c22.002 0 40-17.998 40-40V226c0-22.002-17.998-40-40-40zM256 368c-22.002 0-40-17.998-40-40s17.998-40 40-40 40 17.998 40 40-17.998 40-40 40zm62.002-182H193.998v-40c0-34.004 28.003-62.002 62.002-62.002 34.004 0 62.002 27.998 62.002 62.002v40z"/>
                         </svg>
                     </span>
-                    <input type="password" v-model="pswd_input" @focus="onPswdFocus" @blur="handBlurPswd" id="user_pswd" name="user_pswd">
+                    <span class="icon lock" v-else  @click="changeVisible">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path d="M376 186h-20v-40c0-55-45-100-100-100S156 91 156 146h37.998c0-34.004 28.003-62.002 62.002-62.002 34.004 0 62.002 27.998 62.002 62.002H318v40H136c-22.002 0-40 17.998-40 40v200c0 22.002 17.998 40 40 40h240c22.002 0 40-17.998 40-40V226c0-22.002-17.998-40-40-40zM256 368c-22.002 0-40-17.998-40-40s17.998-40 40-40 40 17.998 40 40-17.998 40-40 40z"/>
+                        </svg>
+                    </span>
+                    <input :type="pswdIsVisible ? 'text' : 'password'" v-model="pswd_input" @focus="onPswdFocus" @blur="handBlurPswd" id="user_pswd" name="user_pswd">
                     <lable for="user_pswd" :style="label_pswd_top">Пароль</lable>
                 </div>
                 <div class="remeber-forgot">
@@ -57,12 +62,17 @@
                     <lable for="user_email" :style="label_email_top">Почта</lable>
                 </div>
                 <div class="input-box">
-                    <span class="icon" v-if="!pswdIsVisible" @click="changeVisible">
+                    <span class="icon lock" v-if="!pswdIsVisible" @click="changeVisible">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                             <path d="M376 186h-20v-40c0-55-45-100-100-100S156 91 156 146v40h-20c-22.002 0-40 17.998-40 40v200c0 22.002 17.998 40 40 40h240c22.002 0 40-17.998 40-40V226c0-22.002-17.998-40-40-40zM256 368c-22.002 0-40-17.998-40-40s17.998-40 40-40 40 17.998 40 40-17.998 40-40 40zm62.002-182H193.998v-40c0-34.004 28.003-62.002 62.002-62.002 34.004 0 62.002 27.998 62.002 62.002v40z"/>
                         </svg>
                     </span>
-                    <input type="password" v-model="pswd_input" @focus="onPswdFocus" @blur="handBlurPswd" id="user_pswd" name="user_pswd">
+                    <span class="icon lock" v-else @click="changeVisible">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path d="M376 186h-20v-40c0-55-45-100-100-100S156 91 156 146h37.998c0-34.004 28.003-62.002 62.002-62.002 34.004 0 62.002 27.998 62.002 62.002H318v40H136c-22.002 0-40 17.998-40 40v200c0 22.002 17.998 40 40 40h240c22.002 0 40-17.998 40-40V226c0-22.002-17.998-40-40-40zM256 368c-22.002 0-40-17.998-40-40s17.998-40 40-40 40 17.998 40 40-17.998 40-40 40z"/>
+                        </svg>
+                    </span>
+                    <input :type="pswdIsVisible ? 'text' : 'password'" v-model="pswd_input" @focus="onPswdFocus" @blur="handBlurPswd" id="user_pswd" name="user_pswd">
                     <lable for="user_pswd" :style="label_pswd_top">Пароль</lable>
                 </div>
                 <div class="remeber-forgot">
@@ -126,7 +136,7 @@ export default {
                 this.$refs.regForm.classList.remove('animationNone');
                 this.isLoginForm = false;
                 this.$refs.regForm.classList.add('animationDisplay');
-            }, 4000 )
+            }, 2000 )
         },
         openLogForm() {
             this.$refs.regForm.classList.remove('animationDisplay');
@@ -135,7 +145,7 @@ export default {
                 this.$refs.loginForm.classList.remove('animationNone');
                 this.isLoginForm = true;
                 this.$refs.loginForm.classList.add('animationDisplay');
-            }, 4000 )
+            }, 2000 )
         }
     }
 }
@@ -165,13 +175,13 @@ export default {
 
 .animationNone {
 animation-name: rotateAndNone;
-animation-duration: 4s;
+animation-duration: 2s;
 animation-fill-mode: forwards;
 }
 
 .animationDisplay {
 animation-name: rotateAndDisplay;
-animation-duration: 4s;
+animation-duration: 2s;
 animation-fill-mode: forwards;
 }
 
@@ -226,6 +236,10 @@ animation-fill-mode: forwards;
                     position: absolute;
                     right: 8px;
                     font-size: 1.2em;
+
+                    &.lock {
+                        cursor: pointer;
+                    }
 
                     svg {
                         width: 20px;

@@ -2,7 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require('copy-webpack-plugin');
 const fs = require('fs');
-const { VueLoaderPlugin, default: loader } = require('vue-loader');
+const { VueLoaderPlugin } = require('vue-loader');
 
 
 module.exports = {
