@@ -3,9 +3,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 dotenv.config({ path: 'backend/.env' });
 
-import userRouter from './routes/userRouter.ts';
-import apiRouter from './routes/apiRouter.ts';
-import publicRouter from './routes/publicRouter.ts';
+import userRouter from './routes/userRouter'
 
 
 const PORT: number = Number( process.env.PORT || 5000 );
@@ -18,10 +16,11 @@ const app = express();
 app.use( express.json() );
 app.use( express.urlencoded( { extended: true } ) )
 app.use( express.static( path.join( __dirname, '../frontend/dist' ) ) );
-
 app.use( userRouter );
-app.use( apiRouter );
-app.use( publicRouter );
+
+app.get('*', (req, res) => {
+    res.sendFile( path.join( __dirname, '../frontend/dist/index.html' ) );
+})
 
 const start =  () => {
     try {
