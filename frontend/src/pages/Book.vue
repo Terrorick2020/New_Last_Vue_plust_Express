@@ -1,19 +1,19 @@
 <template>
     <AccountHeader :nav_attr="nav_attr" :btn_name="btn_name" />
-    <div class="client">
-        <Books />
+    <div class="book">
+        <BodyBook />
         <Footer />
     </div>
 </template>
 
 <script>
 import AccountHeader from './components/AccountHeader.vue';
-import Books from './components/Books.vue';
+import BodyBook from './components/BodyBook.vue';
 import Footer from './components/Footer.vue';
 
 
 export default {
-    components: { AccountHeader, Books, Footer },
+    components: { AccountHeader, BodyBook, Footer },
     data() {
         return {
             nav_attr: [
@@ -28,8 +28,8 @@ export default {
                 }
             ],
             btn_name: {
-                name: 'Главная',
-                path: '/authorization'
+                name: 'Назад',
+                path: '/client'
             }
         }
     }
@@ -37,7 +37,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.client {
+.book {
     position: absolute;
     top: 0;
     width: 100%;

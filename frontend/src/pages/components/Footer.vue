@@ -19,6 +19,7 @@ export default {
     margin-top: 50px;
     display: flex;
     justify-content: center;
+    position: relative;
 
     .footer__body {
         height: 80px;

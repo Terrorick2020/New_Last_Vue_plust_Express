@@ -192,8 +192,8 @@ animation-fill-mode: forwards;
 
     .authorization__form {
         position: relative;
-        width: 420px;
-        height: 470px;
+        width: 470px;
+        height: 500px;
         background: transparent;
         border:  2px solid rgba(255, 255, 255, .5);
         border-radius: 20px;
@@ -265,7 +265,7 @@ animation-fill-mode: forwards;
                     font-size: 1em;
                     color: black;
                     font-weight: 500;
-                    transition: all 0.5 ease;
+                    transition: all 0.5s ease;
                 }
             }
 
@@ -273,7 +273,7 @@ animation-fill-mode: forwards;
                 width: 100%;
                 display: flex;
                 justify-content: space-between;
-                transition: all 0.5 ease;
+                transition: all 0.5s ease;
 
                 label {
 
@@ -303,7 +303,7 @@ animation-fill-mode: forwards;
                 cursor: pointer;
                 border-radius: 10px;;
                 background: transparent;
-                transition: all 0.5 ease;
+                transition: all 0.5s ease;
                 font-size: 1.1em;
 
                 &:hover {
