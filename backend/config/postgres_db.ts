@@ -159,7 +159,7 @@ export default {
         }
     },
 
-    changeRole: async (pool: Pool, userData: { schema: string, id: number, role: string }) => {
+    changeRole: async (pool: Pool, userData: { schema: string, id: number, role: Array<String> }) => {
         try {
             const queryText = `UPDATE ${userData.schema} SET role = $1 WHERE id = $2 RETURNING *`;
             const values = [userData.role, userData.id];

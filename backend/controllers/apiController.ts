@@ -2,10 +2,13 @@ import { Request, Response } from "express";
 import dotenv from 'dotenv';
 import db_connect from '../config/postgres_db';
 import jwt from 'jsonwebtoken';
-import secret from '../config/secret';
+import { sendConfirmationEmail } from '../services/mailer';
+
+dotenv.config();
 
 let pool_config = JSON.parse(process.env.POSTGRES_CONFIG || '{"config":"undefined"}');
 let user_config = JSON.parse(process.env.USER_CONFIG || '{"config":"undefined"}');
+let jwt_key = process.env.JWT_KEY || 'SECRET_KEY_RANDOM';
 
 if (pool_config.config === "undefined" || user_config.config === "undefined") {
     throw new Error(`Ошибка конфигурации контроллера!`);
@@ -31,7 +34,7 @@ export default {
                     role: isAuthenticated.role
                 };
 
-                const token = jwt.sign(payload, secret.secret, { expiresIn: '24h' });
+                const token = jwt.sign(payload, jwt_key, { expiresIn: '24h' });
 
                 res.status(200).json({ 'result': 'success', 'token': token, 'payload': payload});
             } else {
@@ -57,6 +60,9 @@ export default {
             const result = await db_connect.add_user(pool, user_config);
 
             if (result.result === 'success') {
+                const token = jwt.sign({ userId: user_config.id }, jwt_key, { expiresIn: '1h' });
+                await sendConfirmationEmail(user_config.email, token);
+
                 res.status(200).json(result);
             } else {
                 res.status(401).json({ 'result': 'registration_error', 'code': result.code });

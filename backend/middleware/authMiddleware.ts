@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import config from '../config/secret';
+
+const jwt_key = process.env.JWT_KEY || 'SECRET_KEY_RANDOM';
+
 
 export default function (roles: Array<string>) {
     return (req: Request, res: Response, next: NextFunction) => {
@@ -20,7 +22,7 @@ export default function (roles: Array<string>) {
                 return res.status(403).json({ message: 'Пользователь не авторизован' });
             }
             
-            const decodedToken = jwt.verify(token, config.secret) as { role: Array<string> };
+            const decodedToken = jwt.verify(token, jwt_key) as { role: Array<string> };
             const userRoles = decodedToken.role;
 
             const hasRole = roles.some(role => userRoles.includes(role));
