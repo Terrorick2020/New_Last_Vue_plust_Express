@@ -1,8 +1,8 @@
 const path = require("path");
-const HtmlWebpuckPlugin = require("html-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require('copy-webpack-plugin');
 const fs = require('fs');
-const { VueLoaderPlugin, default: loader } = require('vue-loader');
+const { VueLoaderPlugin } = require('vue-loader');
 
 
 module.exports = {
@@ -25,8 +25,8 @@ module.exports = {
                 ]
             },
             {
-                test: /\.$scss/,
-                use: [ 'vue-style-loader', 'css-loader', 'sass-loader' ]
+                test: /\.scss$/,
+                use: ['vue-style-loader', 'css-loader', 'sass-loader'],
             },
             {
                 test: /\.(png|jpg|jpeg|gif|svg|ico)$/i,
@@ -49,7 +49,7 @@ module.exports = {
         open: true
     },
     plugins: [
-        new HtmlWebpuckPlugin({
+        new HtmlWebpackPlugin({
             template: path.resolve( __dirname, './src/index.html' ),
             filename: 'index.html'
         }),

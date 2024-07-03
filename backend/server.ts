@@ -3,8 +3,10 @@ import path from 'path';
 import dotenv from 'dotenv';
 dotenv.config({ path: 'backend/.env' });
 
-import userRouter from './routes/userRouter';
+import bookRouter from './routes/bookRouter';
+import apiRouter from './routes/apiRouter';
 import publicRouter from './routes/publicRouter';
+import userRouter from './routes/userRouter';
 
 
 const PORT: number = Number( process.env.PORT || 5000 );
@@ -18,8 +20,9 @@ app.use( express.json() );
 app.use( express.urlencoded( { extended: true } ) )
 app.use( express.static( path.join( __dirname, '../frontend/dist' ) ) );
 
+app.use( bookRouter );
+app.use( apiRouter );
 app.use( userRouter );
-// app.use( apiRouter );
 app.use( publicRouter );
 
 const start =  () => {

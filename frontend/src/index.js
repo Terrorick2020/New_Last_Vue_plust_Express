@@ -4,4 +4,4 @@ import router from './routes/router.js'
 import store from './store/store.js'
 
 
-createApp( App ).use( store ).use( router ).mounted( "#app" );
+createApp( App ).use( store ).use( router ).mount( "#app" );

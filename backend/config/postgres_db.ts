@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-// import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 export default {
     connect_to_postgres_db: async (poolConfig: object) => {
@@ -25,23 +25,30 @@ export default {
 
     identify_user: async (pool: Pool, userData: { schema: string, login: string, password: string }) => {
         try {
-            const queryText = `SELECT id FROM ${userData.schema} WHERE login=$1 AND password=$2`;
-            const values = [userData.login, userData.password];
+            const queryText = `SELECT id, password, role FROM ${userData.schema} WHERE login=$1`;
+            const values = [userData.login];
             const res = await pool.query(queryText, values);
-    
-            // Check if res is not null and res.rowCount is greater than 0
+        
             if (res && res.rowCount && res.rowCount > 0) {
-                return true;  // User found
+              const user = res.rows[0];
+              const isPasswordValid = await bcrypt.compare(userData.password, user.password);
+              
+              if (isPasswordValid) {
+                // console.log({ id: user.id, role: user.role });
+                return { id: user.id, role: user.role };  
+              } else {
+                return false; 
+              }
             } else {
-                return false; // User not found
+              return false; 
             }
-        } catch (error) {
+          } catch (error) {
             console.error('Возникла ошибка при работе с БД: PostgreSQL');
             console.error(error);
-            return false; // Error occurred during query
+            return false; 
         }
     },
-    add_user: async (pool: Pool, userData: { schema: string, login: string, email: string, password: string, role: string }) => {
+    add_user: async (pool: Pool, userData: { schema: string, login: string, email: string, password: string, role: Array<String> }) => {
         try {
             const hashedPassword = await bcrypt.hash(userData.password, 10);
             const queryText = `INSERT INTO ${userData.schema} (login, email, password, role) VALUES ($1, $2, $3, $4) RETURNING *`;
