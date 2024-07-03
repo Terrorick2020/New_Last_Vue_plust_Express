@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import dotenv from 'dotenv';
-import db_connect from '../config/postgres_db';
+import db_connection from '../config/dbConnection';
+import bookManager from "../config/bookManager";
+
+dotenv.config();
 
 let pool_config = JSON.parse(process.env.POSTGRES_CONFIG || '{"config":"undefined"}');
 let user_config = JSON.parse(process.env.USER_CONFIG || '{"config":"undefined"}');
@@ -16,13 +19,13 @@ export default {
         try {
             book_config = { ...book_config, ...req.body };
 
-            const pool = await db_connect.connect_to_postgres_db(pool_config);
+            const pool = await db_connection.connectToPostgresDB(pool_config);
 
             if (!pool) {
                 throw new Error(`Возникла ошибка: объект pool: ${pool}! Не получается подключиться к бд: PostgreSQL!`);
             }
 
-            const result = await db_connect.getAllBooks(pool, book_config);
+            const result = await bookManager.getAllBooks(pool, book_config);
 
             if (result.result === 'success') {
                 res.status(200).json(result);
@@ -41,13 +44,13 @@ export default {
             const book_id = {id: req.params.id}
             book_config = { ...book_config, ...book_id };
 
-            const pool = await db_connect.connect_to_postgres_db(pool_config);
+            const pool = await db_connection.connectToPostgresDB(pool_config);
 
             if (!pool) {
                 throw Error(`Возникла ошибка: объект pool: ${pool}! Не получается подключиться к бд: PostgreSQL!`);
             }
 
-            const result = await db_connect.getBookByID(pool, book_config);
+            const result = await bookManager.getBookByID(pool, book_config);
 
             if (result.result === 'success') {
                 res.status(200).json(result);
@@ -65,13 +68,13 @@ export default {
         try {
             book_config = { ...book_config, ...req.body };
 
-            const pool = await db_connect.connect_to_postgres_db(pool_config);
+            const pool = await db_connection.connectToPostgresDB(pool_config);
 
             if (!pool) {
                 throw Error(`Возникла ошибка: объект pool: ${pool}! Не получается подключиться к бд: PostgreSQL!`);
             }
 
-            const result = await db_connect.add_book(pool, book_config);
+            const result = await bookManager.add_book(pool, book_config);
 
             if (result.result === 'success') {
                 res.status(200).json(result);
@@ -90,13 +93,13 @@ export default {
             const book_id = {id: req.params.id}
             book_config = { ...book_config, ...book_id };
 
-            const pool = await db_connect.connect_to_postgres_db(pool_config);
+            const pool = await db_connection.connectToPostgresDB(pool_config);
 
             if (!pool) {
                 throw Error(`Возникла ошибка: объект pool: ${pool}! Не получается подключиться к бд: PostgreSQL!`);
             }
 
-            const result = await db_connect.delete_book(pool, book_config);
+            const result = await bookManager.delete_book(pool, book_config);
 
             if (result.result === 'success') {
                 res.status(200).json(result);
@@ -119,13 +122,13 @@ export default {
                 return res.status(400).json({ 'result': 'book_error', 'code': 'no_update_data' });
             }
     
-            const pool = await db_connect.connect_to_postgres_db(pool_config);
+            const pool = await db_connection.connectToPostgresDB(pool_config);
     
             if (!pool) {
                 throw Error(`Возникла ошибка: объект pool: ${pool}! Не получается подключиться к бд: PostgreSQL!`);
             }
     
-            const result = await db_connect.update_book(pool, bookId, updates);
+            const result = await bookManager.update_book(pool, bookId, updates);
     
             if (result.result === 'success') {
                 res.status(200).json(result);

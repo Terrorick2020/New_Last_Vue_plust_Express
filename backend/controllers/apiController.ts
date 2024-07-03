@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import dotenv from 'dotenv';
-import db_connect from '../config/postgres_db';
+import db_connection from '../config/dbConnection';
+import userManager from "../config/userManager";
 import jwt from 'jsonwebtoken';
 import { sendConfirmationEmail } from '../services/mailer';
 
@@ -19,13 +20,13 @@ export default {
         try {
             user_config = { ...user_config, ...req.body };
 
-            const pool = await db_connect.connect_to_postgres_db(pool_config);
+            const pool = await db_connection.connectToPostgresDB(pool_config);
 
             if (!pool) {
                 throw new Error(`Возникла ошибка: объект pool: ${pool}! Не получается подключиться к бд: PostgreSQL!`);
             }
 
-            const isAuthenticated = await db_connect.identify_user(pool, user_config);
+            const isAuthenticated = await userManager.identifyUser(pool, user_config);
 
             if (isAuthenticated) {
                 const payload = { 
@@ -51,13 +52,13 @@ export default {
         try {
             user_config = { ...user_config, ...req.body };
 
-            const pool = await db_connect.connect_to_postgres_db(pool_config);
+            const pool = await db_connection.connectToPostgresDB(pool_config);
 
             if (!pool) {
                 throw new Error(`Возникла ошибка: объект pool: ${pool}! Не получается подключиться к бд: PostgreSQL!`);
             }
 
-            const result = await db_connect.add_user(pool, user_config);
+            const result = await userManager.addUser(pool, user_config);
 
             if (result.result === 'success') {
                 const token = jwt.sign({ userId: user_config.id }, jwt_key, { expiresIn: '1h' });
