@@ -1,5 +1,5 @@
-import MongoConnect from '../config/mongo_db.ts';
-import MysqlConnect from '../config/mysql_db.ts';
+import MongoConnect from '../config/mongo_db';
+import MysqlConnect from '../config/mysql_db';
 
 require('dotenv').config( { path: 'backend/.env' } );
 
@@ -10,7 +10,7 @@ if( pool_config.config == "undefined" || user_config.config == "undefined" ) thr
 
 
 export default {
-    autorizationUser: async ( req, res ) => {
+    autorizationUser: async ( req: any, res: any ) => {
         try {
             user_config = { ...user_config, ...req.body };
 
@@ -23,7 +23,7 @@ export default {
             const miss = await MysqlConnect.identification_user( pool, user_config );
 
             if( miss ) {
-                res.status( 200 ).json( { 'result': 'success' } );
+                res.status( 200 ).json( miss );
             } else {
                 res.status( 401 ).json( { 'result': 'auterization_error' } );
             }
@@ -32,7 +32,7 @@ export default {
             res.status( 500 ).json( { 'result': 'server_error' } )
         }
     },
-    regUser: async ( req, res ) => {
+    regUser: async ( req: any, res: any ) => {
         try {
             user_config = { ...user_config, ...req.body };
 

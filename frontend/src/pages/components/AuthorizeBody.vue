@@ -9,8 +9,8 @@
                             <path d="M437.332 80H74.668C51.199 80 32 99.198 32 122.667v266.666C32 412.802 51.199 432 74.668 432h362.664C460.801 432 480 412.802 480 389.333V122.667C480 99.198 460.801 80 437.332 80zM432 170.667L256 288 80 170.667V128l176 117.333L432 128v42.667z"/>
                         </svg>
                     </span>
-                    <input type="email" v-model="email_input" @focus="onEmailFocus" @blur="handBlurEmail" id="user_email" name="user_email">
-                    <lable for="user_email" :style="label_email_top">Почта</lable>
+                    <input type="text" v-model="login_input" @focus="onLoginFocus" @blur="handBlurLogin" id="user_login" name="user_login">
+                    <lable for="user_login" :style="label_login_top">Логин</lable>
                 </div>
                 <div class="input-box">
                     <span class="icon lock" v-if="!pswdIsVisible" @click="changeVisible">
@@ -82,7 +82,7 @@
                     </label>
                     <a>Генерация пароль!</a>
                 </div>
-                <button type="button" class="box__btn">Зарегистрироваться</button>
+                <button @click="addUserInSys" type="button" class="box__btn">Зарегистрироваться</button>
                 <div class="box__log-reg">
                     <p>Уже есть аккаунт?</p>
                     <a @click="openLogForm">Войти!</a>
@@ -93,6 +93,10 @@
 </template>
 
 <script>
+import axios from 'axios';
+import CryptoJS from 'crypto-js';
+
+
 export default {
     data() {
         return {
@@ -104,7 +108,7 @@ export default {
             label_pswd_top: '',
             label_login_top: '',
             pswdIsVisible: false,
-            isLoginForm: true
+            isLoginForm: false
         }
     },
     methods: {
@@ -146,6 +150,35 @@ export default {
                 this.isLoginForm = true;
                 this.$refs.loginForm.classList.add('animationDisplay');
             }, 2000 )
+        },
+        async addUserInSys() {
+            const hash = CryptoJS.SHA256( this.pswd_input );
+
+            const payload = {
+                login: this.login_input,
+                email: this.email_input,
+                pswd: hash.toString(CryptoJS.enc.Hex)
+            }
+
+            await this.$store.dispatch( 'addUser', payload );
+            
+            if( this.$store.getters.getAuthStatus ) {
+                this.$router.push('/client')
+            }
+        },
+        async logUserInSys() {
+            const hash = CryptoJS.SHA256( this.pswd_input );
+
+            const payload = {
+                login: this.login_input,
+                pswd: hash.toString(CryptoJS.enc.Hex)
+            }
+
+            await this.$store.dispatch( 'identificationUser', payload );
+
+            if( this.$store.getters.getAuthStatus ) {
+                this.$router.push('/client')
+            }
         }
     }
 }
@@ -192,7 +225,7 @@ animation-fill-mode: forwards;
 
     .authorization__form {
         position: relative;
-        width: 470px;
+        width: 420px;
         height: 500px;
         background: transparent;
         border:  2px solid rgba(255, 255, 255, .5);

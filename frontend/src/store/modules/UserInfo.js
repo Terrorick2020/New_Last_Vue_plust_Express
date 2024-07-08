@@ -3,36 +3,43 @@ import axios from 'axios';
 
 export default {
     actions: {
-        async addUser( context, login, email, pswd ) {
+        async addUser( context, payload ) {
             try {
-                const response = await axios('http://localhost:3000/api/registration',
-                    {
-                        'login': login,
-                        'email': email,
-                        'pswd': pswd
-                    },
-                    {
-                        headers: {
-                            'Content-Type': application/x-www-form-urlencoded
-                        }
+                const response = await axios.post('http://localhost:3000/api/registration', payload, {
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
-                );
-                context.commit( 'updateUserInfo', response.data );
+                });
+
+                if( response.data.result === 'success' && !response.data.code ) {
+                    context.commit( 'updateUserInfo', payload );
+                }
             } catch ( error ) {
-                console.log( `Возникла ошибк при добавлении пользователя!` );
+                console.log( `Возникла ошибка при добавлении пользователя!` );
                 console.error( error );
+            }
+        },
+        async identificationUser( context, payload ) {
+            try {
+                const response = await axios.post('http://localhost:3000/api/registration', payload, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if( response.data.result === 'success' && !response.data.code ) {
+                    context.commit( 'updateUserInfo', payload );
+                }
+            } catch ( error ) {
+
             }
         }
     },
     mutations: {
-        updateUserInfo( state, userInfo ) {
-            state.user_info.userId = userInfo.userId;
-            state.user_info.userName = userInfo.userName;
-            state.user_info.email = userInfo.email;
-            state.user_info.accessToken = userInfo.accessToken;
-            state.user_info.refreshToken = userInfo.refreshToken;
-            state.user_info.role = userInfo.role;
-            state.user_info.expiresIn = userInfo.expiresIn;
+        updateUserInfo( state, payload ) {
+            state.user_info.isAuth = true;
+            state.user_info.username = payload.login;
+            state.user_info.email = payload.email;
         }
     },
     state: {
@@ -43,7 +50,8 @@ export default {
             accessToken: '',
             refreshToken: '',
             role: '',
-            expiresIn: ''
+            expiresIn: '',
+            isAuth: false,
         },
         personal_info: {
             icon: ''
@@ -51,6 +59,7 @@ export default {
     },
     getters: {
         getUserName: state => state.user_info.username,
-        getUserIcon: state => state.personal_info.icon
+        getUserIcon: state => state.personal_info.icon,
+        getAuthStatus: state => state.user_info.isAuth
     }
 }

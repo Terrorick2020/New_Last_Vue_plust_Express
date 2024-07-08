@@ -68,6 +68,10 @@ $main-color: rgb(210, 210, 210);
     justify-content: space-between;
     align-items: center;
     z-index: 99;
+    background-blend-mode: multiply;
+    background: transparent;
+    background-color: rgba(42, 37, 64, 0.3);
+    box-shadow: 0 0 4px white;
 
     .header__logo {
         

@@ -41,6 +41,10 @@ export default {
     justify-content: space-between;
     align-items: center;
     z-index: 99;
+    background-blend-mode: multiply;
+    background: transparent;
+    background-color: rgba(42, 36, 65, 0.3);
+    box-shadow: 0 0 4px white;
 
     .header__logo {
         
@@ -103,7 +107,7 @@ export default {
 
             button {
                 cursor: pointer;
-                width: 130px;
+                padding: 5px 8px;
                 background: transparent;
                 border: 2px solid rgb(198, 198, 198);
                 height: 50px;

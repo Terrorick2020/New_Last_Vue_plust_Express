@@ -27,7 +27,9 @@ export default {
             const [ rows ] = await pool.execute( sql, params );
 
             if( rows[0] ) {
-                return true;
+                return { 
+                    'result': 'success' 
+                };
             } else {
                 return false;
             }
@@ -44,16 +46,15 @@ export default {
             
             if( result ) {
                 return {
-                    'result': 'error',
-                    'code': 'success_reg_user'
+                    'result': 'success'
                 };
             }
 
         } catch ( error ) {
             if( error.code == 'ER_DUP_ENTRY' ) {
-                return { 
-                    'code': error.code,
-                    'dup_pos': error.sqlMessage.includes('login') ? 'login' : error.sqlMessage.includes('email') ? 'email' : 'undefined'
+                return {
+                    'result': 'error',
+                    'code': error.code
                 };
             } else {
                 console.error( `Возникла ошибка при работе с БД: MySQL! /*3` );

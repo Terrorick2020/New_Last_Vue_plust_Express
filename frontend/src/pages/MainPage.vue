@@ -1,5 +1,5 @@
 <template>
-    <Header :nav_attr="nav_attr" :btn_name="btn_name" />
+    <Header :nav_attr="nav_attr" :btn_name="getAuthStatus ? alternate_btn_name : base_btn_name" />
     <div class="main">
         <Info />
         <Condition />
@@ -12,9 +12,14 @@ import Header from './components/Header.vue';
 import Info from './components/Info.vue';
 import Condition from './components/Condition.vue';
 import Footer from './components/Footer.vue';
+import { mapGetters } from 'vuex';
+
 
 export default {
     components: { Header, Info, Condition, Footer },
+    computed: {
+        ...mapGetters([ 'getAuthStatus' ])
+    },
     data() {
         return {
             nav_attr: [
@@ -28,9 +33,13 @@ export default {
                      name: 'Книги'
                 }
             ],
-            btn_name: {
+            base_btn_name: {
                 name: 'Авторизация',
                 path: '/authorization'
+            },
+            alternate_btn_name: {
+                name: 'Личная страница',
+                path: '/client'
             }
         }
     }
