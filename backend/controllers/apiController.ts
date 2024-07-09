@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import dotenv from 'dotenv';
 import db_connection from '../config/dbConnection';
 import userManager from "../config/userManager";
-import jwt from 'jsonwebtoken';
-import { sendConfirmationEmail } from '../services/mailer';
+import jwt from '../services/JWT_helper';
+// import { sendConfirmationEmail } from '../services/mailer';
 
 dotenv.config();
 
@@ -34,10 +34,10 @@ export default {
                     login: user_config.login,
                     role: isAuthenticated.role
                 };
-
-                const token = jwt.sign(payload, jwt_key, { expiresIn: '24h' });
-
-                res.status(200).json({ 'result': 'success', 'token': token, 'payload': payload});
+                let AccessToken = jwt.signAccessToken(payload);
+                let RefreshToken = jwt.signRefreshToken(payload);
+                console.log(AccessToken);
+                console.log(RefreshToken);                res.status(200).json({ 'result': 'success', 'AccessToken': AccessToken, 'RefreshToken': RefreshToken });
             } else {
                 res.status(401).json({ 'result': 'authorization_error' });
             }
@@ -60,11 +60,18 @@ export default {
 
             const result = await userManager.addUser(pool, user_config);
 
-            if (result.result === 'success') {
-                const token = jwt.sign({ userId: user_config.id }, jwt_key, { expiresIn: '1h' });
-                await sendConfirmationEmail(user_config.email, token);
+            const payload = { 
+                id: result.id,
+                login: user_config.login,
+                role: user_config.role
+            };
 
-                res.status(200).json(result);
+            if (result.result === 'success') {
+                // await sendConfirmationEmail(user_config.email, access_token);
+                let AccessToken = jwt.signAccessToken(payload);
+                let RefreshToken = jwt.signRefreshToken(payload);
+
+                res.status(200).json({ 'result': 'success', 'AccessToken': AccessToken, 'RefreshToken': RefreshToken });
             } else {
                 res.status(401).json({ 'result': 'registration_error', 'code': result.code });
             }
@@ -73,5 +80,29 @@ export default {
             console.error(error);
             res.status(500).json({ 'result': 'server_error' });
         }
-    }
+    },
+    refreshToken: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            let refreshToken = req.body['refresh_token'];
+      
+            if (!refreshToken) {
+                throw new Error("Ошибка - не передан refresh_token");
+            }
+
+            const payload = await jwt.verifyRefreshToken(refreshToken);
+            console.log(req.body);
+
+            const AccessToken = await jwt.signAccessToken(payload);
+            const RefreshToken = await jwt.signRefreshToken(payload);
+      
+            res.status(200).json({
+                result: 'success',
+                AccessToken,
+                RefreshToken,
+            });
+        } catch (error) {
+            next(error);
+        }
+      }
+      
 }

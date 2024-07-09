@@ -8,4 +8,6 @@ router.post( '/autorization', apiController.autorizationUser );
 
 router.post( '/registration', apiController.regUser );
 
+router.post( '/refresh_token', apiController.refreshToken );
+
 export default router;
