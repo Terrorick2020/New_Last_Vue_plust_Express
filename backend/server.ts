@@ -25,7 +25,7 @@ app.use( apiRouter );
 app.use( userRouter );
 app.use( publicRouter );
 
-const start =  () => {
+const start = () => {
     try {
         app.listen( PORT, HOST, () => {
             console.log( `Сервер работает по адресу: http://${HOST}:${PORT}` );

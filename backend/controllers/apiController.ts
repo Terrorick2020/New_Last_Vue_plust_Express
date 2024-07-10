@@ -3,13 +3,14 @@ import dotenv from 'dotenv';
 import db_connection from '../config/dbConnection';
 import userManager from "../config/userManager";
 import jwt from '../services/JWT_helper';
-// import { sendConfirmationEmail } from '../services/mailer';
+import authSchema from "../middleware/validationMiddleware";
+import { sendConfirmationEmail } from '../services/mailer';
 
 dotenv.config();
 
 let pool_config = JSON.parse(process.env.POSTGRES_CONFIG || '{"config":"undefined"}');
 let user_config = JSON.parse(process.env.USER_CONFIG || '{"config":"undefined"}');
-let jwt_key = process.env.JWT_KEY || 'SECRET_KEY_RANDOM';
+
 
 if (pool_config.config === "undefined" || user_config.config === "undefined") {
     throw new Error(`Ошибка конфигурации контроллера!`);
@@ -58,6 +59,8 @@ export default {
                 throw new Error(`Возникла ошибка: объект pool: ${pool}! Не получается подключиться к бд: PostgreSQL!`);
             }
 
+            user_config = await authSchema.validateAsync(user_config);
+
             const result = await userManager.addUser(pool, user_config);
 
             const payload = { 
@@ -67,10 +70,10 @@ export default {
             };
 
             if (result.result === 'success') {
-                // await sendConfirmationEmail(user_config.email, access_token);
+                
                 let AccessToken = jwt.signAccessToken(payload);
                 let RefreshToken = jwt.signRefreshToken(payload);
-
+                await sendConfirmationEmail( user_config.email, AccessToken );
                 res.status(200).json({ 'result': 'success', 'AccessToken': AccessToken, 'RefreshToken': RefreshToken });
             } else {
                 res.status(401).json({ 'result': 'registration_error', 'code': result.code });
