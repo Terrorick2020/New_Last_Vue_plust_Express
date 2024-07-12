@@ -93,7 +93,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import CryptoJS from 'crypto-js';
 
 
@@ -157,8 +156,8 @@ export default {
             const payload = [
                 {
                     login: this.login_input,
-                    email: this.email_input,
-                    password: hash.toString(CryptoJS.enc.Hex),
+                    email: this.email_input.toLowerCase(),
+                    password:  this.pswd_input,
                     role: ['ADMIN', 'USER']
                 },
                 this.remember_me ]
@@ -166,7 +165,7 @@ export default {
             await this.$store.dispatch( 'addUser', payload );
             
             if( this.$store.getters.getAuthStatus ) {
-                this.$router.push('/client')
+                this.$router.push('/confirm');
             }
         },
         async logUserInSys() {
@@ -183,7 +182,7 @@ export default {
             await this.$store.dispatch( 'identificationUser', payload );
 
             if( this.$store.getters.getAuthStatus ) {
-                this.$router.push('/client')
+                this.$router.push('/authorization/confirm');
             }
         }
     }

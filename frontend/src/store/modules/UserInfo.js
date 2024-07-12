@@ -4,6 +4,9 @@ import axios from 'axios';
 export default {
     actions: {
         async addUser( context, payload ) {
+
+            // console.log( payload[0] );
+
             try {
                 const response = await axios.post('http://localhost:3000/registration', payload[0], {
                     headers: {
@@ -11,7 +14,9 @@ export default {
                     }
                 });
 
-                if( response.data.result === 'success' && response.data.accessToken && !response.data.code ) {
+                console.log( response );
+
+                if( response.data.result === "success" && response.data.AccessToken && response.data.RefreshToken && !response.data.code ) {
                     payload.push( response.data );
                     context.commit( 'updateUserInfo', payload );
                 }
@@ -56,16 +61,22 @@ export default {
 
             state.user_info.remember_me = payload[1];
 
-            state.user_info.accessToken = payload[2].accessToken;
+            state.user_info.accessToken = payload[2].AccessToken;
+            state.user_info.refreshToken = payload[2].RefreshToken;
+        },
+        resetAuth( state ) {
+            state.user_info.isAuth = false;
         },
         delInfo( state ) {
             state.user_info = {
                 username: undefined,
                 email: undefined,
-                accessToken: '',
+                AccessToken: '',
+                RefreshToken: '',
                 role: undefined,
                 remember_me: undefined,
                 isAuth: false,
+                isValid: false
             };
             state.user_icon = undefined;
         }
@@ -74,17 +85,20 @@ export default {
         user_info: {
             username: undefined,
             email: undefined,
-            accessToken: '',
+            AccessToken: '',
+            RefreshToken: '',
             role: undefined,
             remember_me: undefined,
             isAuth: false,
+            isValid: false
         },
         user_icon: undefined
     },
     getters: {
         getUserName: state => state.user_info.username,
         getUserIcon: state => state.user_icon,
+        getValidStatus: state => state.user_info.isValid,
         getAuthStatus: state => state.user_info.isAuth,
-        getToken: state => state.user_info.accessToken
+        getTokenStatus: state => state.user_info.AccessToken && state.user_info.AccessToken
     }
 }

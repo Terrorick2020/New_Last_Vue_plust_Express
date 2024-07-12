@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
+import cors from 'cors';
 dotenv.config({ path: 'backend/.env' });
 
 import bookRouter from './routes/bookRouter';
@@ -15,6 +16,8 @@ const MODE: string = process.env.MODE || 'alpha-version';
 
  
 const app = express();
+
+app.use( cors() );
 
 app.use( express.json() );
 app.use( express.urlencoded( { extended: true } ) )

@@ -75,6 +75,7 @@ export default {
                 let AccessToken = jwt.signAccessToken(payload);
                 let RefreshToken = jwt.signRefreshToken(payload);
                 await sendConfirmationEmail( user_config.email, RefreshToken );
+                
                 res.status(200).json({ 'result': 'success', 'AccessToken': AccessToken, 'RefreshToken': RefreshToken });
             } else {
                 res.status(401).json({ 'result': 'registration_error', 'code': result.code });
