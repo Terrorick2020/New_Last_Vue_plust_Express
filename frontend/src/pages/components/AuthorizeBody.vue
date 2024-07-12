@@ -154,11 +154,14 @@ export default {
         async addUserInSys() {
             const hash = CryptoJS.SHA256( this.pswd_input );
 
-            const payload = {
-                login: this.login_input,
-                email: this.email_input,
-                pswd: hash.toString(CryptoJS.enc.Hex)
-            }
+            const payload = [
+                {
+                    login: this.login_input,
+                    email: this.email_input,
+                    password: hash.toString(CryptoJS.enc.Hex),
+                    role: ['ADMIN', 'USER']
+                },
+                this.remember_me ]
 
             await this.$store.dispatch( 'addUser', payload );
             
@@ -169,10 +172,13 @@ export default {
         async logUserInSys() {
             const hash = CryptoJS.SHA256( this.pswd_input );
 
-            const payload = {
-                login: this.login_input,
-                pswd: hash.toString(CryptoJS.enc.Hex)
-            }
+            const payload = [
+                {
+                    login: this.login_input,
+                    pswd: hash.toString(CryptoJS.enc.Hex)
+                },
+                this.remember_me 
+            ];
 
             await this.$store.dispatch( 'identificationUser', payload );
 

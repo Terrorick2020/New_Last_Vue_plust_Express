@@ -18,10 +18,13 @@ export default {
         return {
             nav_attr: [
                 {
-                    name: 'О нас'
-                },
-                {
-                     name: 'Книги'
+                    name: 'О нас',
+                    navHandler: () => {
+                        window.scrollTo({
+                            top: window.outerHeight,
+                            behavior: 'smooth'
+                        });
+                    }
                 }
             ],
             btn_name: {

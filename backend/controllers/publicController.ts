@@ -1,8 +1,9 @@
-import path from "path";
+import path from "path"
+import { Request, Response } from "express";
 
 
 export default {
-    publicNavigation: ( req: any, res: any ) => {
-        res.status(200).sendFile( path.join( __dirname, '../../frontend/dist/index.html' ) );
+    publicNavigation: (req: Request, res: Response) => {
+        res.sendFile( path.join( __dirname, '../../frontend/dist/index.html' ) );
     }
 }

@@ -6,7 +6,7 @@
                     <img src="" alt="">
                 </div>
                 <div class="logo__text">
-                    <h2>MagcikLab</h2>
+                    <h2>MagickLab</h2>
                     <p>Самый безопасный сайт!</p>
                 </div>
             </router-link>
@@ -24,9 +24,14 @@
                 </div>
                 <div class="persone__name">{{ userName }}</div>
                 <div class="persone__vidget">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" @mouseover="viggetIconOver">
                         <path d="M64 64C46.3 64 32 78.3 32 96l0 320c0 17.7 14.3 32 32 32l320 0c17.7 0 32-14.3 32-32l0-320c0-17.7-14.3-32-32-32L64 64zM0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zm235 81.6L288 224l52.2-10.4c-2.6-3.9-4.2-8.5-4.2-13.6c0-13.3 10.7-24 24-24s24 10.7 24 24c0 13-10.3 23.6-23.2 24L304.5 349.1c-5.2 11.5-16.6 18.9-29.2 18.9l-102.6 0c-12.6 0-24-7.4-29.2-18.9L87.2 224C74.3 223.6 64 213 64 200c0-13.3 10.7-24 24-24s24 10.7 24 24c0 5-1.5 9.7-4.2 13.6L160 224l53.1-46.4c-8.9-4.1-15-13.1-15-23.6c0-14.4 11.6-26 26-26s26 11.6 26 26c0 10.5-6.2 19.5-15.1 23.6z"/>
                     </svg>
+                    <div v-show="mouseOnVidgetIcon || mouseOnVidgetNavBlock" class="vidget__nav" @mouseover="vidgetBlockOver" @mouseout="vidgetBlockOut">
+                        <router-link @click="aboutUs">О нас</router-link>
+                        <router-link title="В разработке">Личная информация</router-link>
+                        <router-link to="/" @click="exitFromSys">Выход</router-link>
+                    </div>
                 </div>
                 <div class="persone__icon">
                     <img v-if="userIcon !== ''" src="" alt="">
@@ -37,11 +42,15 @@
     </header>
 </template>
 <script>
+import { mapActions } from 'vuex';
+
+
 export default {
     props: ['nav_attr', 'btn_name'],
     data() {
         return {
-            toPage: 'Главная'
+            mouseOnVidgetIcon: false,
+            mouseOnVidgetNavBlock: false
         }
     },
     computed: {
@@ -50,6 +59,26 @@ export default {
         },
         userIcon() {
             return this.$store.getters.getUserIcon;
+        },
+    },
+    methods: {
+        viggetIconOver() {
+            this.mouseOnVidgetIcon = true;
+        },
+        vidgetBlockOver() {
+            this.mouseOnVidgetNavBlock = true;
+            this.mouseOnVidgetIcon = false;
+        },
+        vidgetBlockOut() {
+            this.mouseOnVidgetNavBlock = false;
+            this.mouseOnVidgetIcon = false;
+        },
+        ...mapActions( [ 'exitFromSys' ] ),
+        aboutUs() {
+            window.scrollTo({
+                top: window.outerHeight,
+                behavior: 'smooth'
+            });
         }
     }
 }
@@ -144,10 +173,36 @@ $main-color: rgb(210, 210, 210);
 
             .persone__vidget {
                 cursor: pointer;
+                position: relative;
 
                 svg {
                     width: 25px;
                     height: auto;
+                }
+
+                .vidget__nav {
+                    position: absolute;
+                    border-radius: 7px;
+                    border: 2px solid grey;
+                    width: 200px;
+                    height: 120px;
+                    background: rgb(33, 52, 88);
+                    display: flex;
+                    flex-direction: column;
+                    padding: 10px 8px;
+                    align-items: start;
+                    gap: 10px;
+                    top: 45px;
+                    box-shadow: 0 0 3px white;
+
+                    a {
+                        font-size: 16px;
+
+                        &:hover {
+                            text-decoration: underline;
+                            letter-spacing: 1px;
+                        }
+                    }
                 }
             }
 

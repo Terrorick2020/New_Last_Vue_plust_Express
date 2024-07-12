@@ -11,7 +11,7 @@
         </div>
         <div class="header__navigation">
             <nav class="nav">
-                <a href="#" v-for="(elem, index) in nav_attr">{{ elem.name }}</a>
+                <a v-for="(elem, index) in nav_attr" @click="elem.navHandler">{{ elem.name }}</a>
                 <router-link :to="btn_name.path" class="routes">
                     <button>{{ btn_name.name }}</button>
                 </router-link>

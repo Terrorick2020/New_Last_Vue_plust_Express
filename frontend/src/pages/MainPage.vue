@@ -24,13 +24,21 @@ export default {
         return {
             nav_attr: [
                 {
-                    name: 'О нас'
+                    name: 'О нас',
+                    navHandler: () => {
+                        window.scrollTo({
+                            top: window.outerHeight,
+                            behavior: 'smooth'
+                        });
+                    }
                 },
                 {
-                    name: 'Инфомация'
+                    name: 'Инфомация',
+                    navHandler: () => console.log('Инфомация')
                 },
                 {
-                     name: 'Книги'
+                     name: 'Книги',
+                     navHandler: () => console.log('Книги')
                 }
             ],
             base_btn_name: {

@@ -19,7 +19,7 @@ const router = createRouter({
     routes: [
         { path: '/home', name: 'home' , component: MainPage, meta: { title: 'Главная', needAuth: false }, alias: '/' },
         { path: '/authorization', name: 'authorization', component: RegLog, meta: { title: 'Авторизация', needAuth: false } },
-        { path: '/client', name: 'client', component: Account, meta: { title: 'Личный кабинет', needAuth: true } },
+        { path: '/client', name: 'client', component: Account, meta: { title: 'Личный кабинет', needAuth: false } },
         { path: '/client/book', name: 'book', component: Book, meta: { title: 'Книга', needAuth: true } },
         { path: '/error', name: 'error', component: PrivateError }
     ]
@@ -31,12 +31,12 @@ router.beforeEach( (to, from, next) => {
     if( foundRouter ) {
         const store = useStore();
 
-        if( to.path === '/authorization' && store.getters.getAuthStatus ) {
+        if( to.path === '/authorization' && store.getters.getAuthStatus && store.getters.getToken ) {
             next( { path: '/client', replace: true } )
         }
 
-        if( to.meta.needAuth && !store.getters.getAuthStatus ) {
-            next( { path: '/authorization', replace: true } );
+        if( to.meta.needAuth && ( !store.getters.getAuthStatus || !store.getters.getToken ) ) {
+            next( { path: '/authorization', replace: true } ); 
         } else {
             next();
         }

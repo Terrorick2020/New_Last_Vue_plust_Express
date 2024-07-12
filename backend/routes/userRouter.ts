@@ -1,10 +1,11 @@
 import { Router } from "express";
 import userController from '../controllers/userController';
+import authMiddleware from "../middleware/authMiddleware";
 
 
 const router = Router();
 
-router.get( '/user', userController.getUserInfo );
-router.get( '/user/books', userController.getBookS )
+router.put('/users/:id/role', authMiddleware(['ADMIN']), userController.changeRole);
+
 
 export default router;
