@@ -51,11 +51,8 @@
   "devDependencies": {
     "@hapi/joi": "^17.1.1",
     "@types/bcrypt": "^5.0.2",
-<<<<<<< HEAD
     "@types/cookie-parser": "^1.4.7",
-=======
     "@types/cors": "^2.8.17",
->>>>>>> 00cd029ac486ceb6b8eef68d129891e9cbaee1d1
     "@types/express": "^4.17.21",
     "@types/hapi__joi": "^17.1.14",
     "@types/ioredis": "^5.0.0",
