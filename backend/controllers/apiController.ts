@@ -5,6 +5,7 @@ import userManager from "../config/userManager";
 import jwt from '../services/JWT_helper';
 import authSchema from "../middleware/validationMiddleware";
 import { sendConfirmationEmail } from '../services/mailer';
+import { verify } from "crypto";
 
 dotenv.config();
 
@@ -73,7 +74,7 @@ export default {
                 
                 let AccessToken = jwt.signAccessToken(payload);
                 let RefreshToken = jwt.signRefreshToken(payload);
-                await sendConfirmationEmail( user_config.email, AccessToken );
+                await sendConfirmationEmail( user_config.email, RefreshToken );
                 res.status(200).json({ 'result': 'success', 'AccessToken': AccessToken, 'RefreshToken': RefreshToken });
             } else {
                 res.status(401).json({ 'result': 'registration_error', 'code': result.code });
@@ -84,6 +85,8 @@ export default {
             res.status(500).json({ 'result': 'server_error' });
         }
     },
+
+
     refreshToken: async (req: Request, res: Response, next: NextFunction) => {
         try {
             let refreshToken = req.body['refresh_token'];

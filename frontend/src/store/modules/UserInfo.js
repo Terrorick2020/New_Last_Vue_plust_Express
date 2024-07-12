@@ -3,13 +3,14 @@ import axios from 'axios';
 
 export default {
     actions: {
-        async addUser( context, login, email, pswd ) {
+        async addUser( context, login, email, pswd, role ) {
             try {
                 const response = await axios('http://localhost:3000/registration',
                     {
                         'login': login,
                         'email': email,
-                        'pswd': pswd
+                        'pswd': pswd,
+                        'role': role
                     },
                     {
                         headers: {
