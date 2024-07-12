@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "NodeNext", 
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["./backend/**/*"],
+  "exclude": ["./frontend/**/*"]
+}

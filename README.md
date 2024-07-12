@@ -1,1 +1,2 @@
-# New_Last_Vue_plust_Express
+# Основной стек: MENV
+# Доплнительные сервисы: PostgreSQL
