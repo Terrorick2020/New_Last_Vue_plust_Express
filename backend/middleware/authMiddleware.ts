@@ -1,12 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-
-const jwt_key = process.env.JWT_KEY || 'SECRET_KEY_RANDOM';
+import jwt from '../services/JWT_helper';
 
 
 export default function (roles: Array<string>) {
     return (req: Request, res: Response, next: NextFunction) => {
-        if (req.method === 'OPTIONS') { // не проверяем HTTP запросы options
+        if (req.method === 'OPTIONS') {
             return next();
         }
 
@@ -22,7 +20,7 @@ export default function (roles: Array<string>) {
                 return res.status(403).json({ message: 'Пользователь не авторизован' });
             }
             
-            const decodedToken = jwt.verify(token, jwt_key) as { role: Array<string> };
+            const decodedToken = jwt.verifyAccessToken(token);
             const userRoles = decodedToken.role;
 
             const hasRole = roles.some(role => userRoles.includes(role));

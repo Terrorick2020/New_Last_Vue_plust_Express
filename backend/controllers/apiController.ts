@@ -1,15 +1,16 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import dotenv from 'dotenv';
 import db_connection from '../config/dbConnection';
 import userManager from "../config/userManager";
-import jwt from 'jsonwebtoken';
+import jwt from '../services/JWT_helper';
+import authSchema from "../middleware/validationMiddleware";
 import { sendConfirmationEmail } from '../services/mailer';
 
 dotenv.config();
 
 let pool_config = JSON.parse(process.env.POSTGRES_CONFIG || '{"config":"undefined"}');
 let user_config = JSON.parse(process.env.USER_CONFIG || '{"config":"undefined"}');
-let jwt_key = process.env.JWT_KEY || 'SECRET_KEY_RANDOM';
+
 
 if (pool_config.config === "undefined" || user_config.config === "undefined") {
     throw new Error(`Ошибка конфигурации контроллера!`);
@@ -34,10 +35,10 @@ export default {
                     login: user_config.login,
                     role: isAuthenticated.role
                 };
-
-                const token = jwt.sign(payload, jwt_key, { expiresIn: '24h' });
-
-                res.status(200).json({ 'result': 'success', 'token': token, 'payload': payload});
+                let AccessToken = jwt.signAccessToken(payload);
+                let RefreshToken = jwt.signRefreshToken(payload);
+                console.log(AccessToken);
+                console.log(RefreshToken);                res.status(200).json({ 'result': 'success', 'AccessToken': AccessToken, 'RefreshToken': RefreshToken });
             } else {
                 res.status(401).json({ 'result': 'authorization_error' });
             }
@@ -58,13 +59,22 @@ export default {
                 throw new Error(`Возникла ошибка: объект pool: ${pool}! Не получается подключиться к бд: PostgreSQL!`);
             }
 
+            user_config = await authSchema.validateAsync(user_config);
+
             const result = await userManager.addUser(pool, user_config);
 
+            const payload = { 
+                id: result.id,
+                login: user_config.login,
+                role: user_config.role
+            };
+
             if (result.result === 'success') {
-                const token = jwt.sign({ userId: user_config.id }, jwt_key, { expiresIn: '1h' });
-                await sendConfirmationEmail(user_config.email, token);
-                result['data']['access_token'] = token;
-                res.status(200).json({ result: result.result, accessToken: result.data.access_token });
+                
+                let AccessToken = jwt.signAccessToken(payload);
+                let RefreshToken = jwt.signRefreshToken(payload);
+                await sendConfirmationEmail( user_config.email, AccessToken );
+                res.status(200).json({ 'result': 'success', 'AccessToken': AccessToken, 'RefreshToken': RefreshToken });
             } else {
                 res.status(401).json({ 'result': 'registration_error', 'code': result.code });
             }
@@ -73,5 +83,29 @@ export default {
             console.error(error);
             res.status(500).json({ 'result': 'server_error' });
         }
-    }
+    },
+    refreshToken: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            let refreshToken = req.body['refresh_token'];
+      
+            if (!refreshToken) {
+                throw new Error("Ошибка - не передан refresh_token");
+            }
+
+            const payload = await jwt.verifyRefreshToken(refreshToken);
+            console.log(req.body);
+
+            const AccessToken = await jwt.signAccessToken(payload);
+            const RefreshToken = await jwt.signRefreshToken(payload);
+      
+            res.status(200).json({
+                result: 'success',
+                AccessToken,
+                RefreshToken,
+            });
+        } catch (error) {
+            next(error);
+        }
+      }
+      
 }
