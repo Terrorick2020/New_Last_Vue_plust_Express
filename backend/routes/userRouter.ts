@@ -7,5 +7,7 @@ const router = Router();
 
 router.put('/users/:id/role', authMiddleware(['ADMIN']), userController.changeRole);
 
+router.get('/confirm/:token', userController.verifyMail);   
+
 
 export default router;

@@ -3,7 +3,6 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require('copy-webpack-plugin');
 const fs = require('fs');
 const { VueLoaderPlugin } = require('vue-loader');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 
 module.exports = {
@@ -48,9 +47,6 @@ module.exports = {
             directory: path.resolve( __dirname, 'dist' )
         },
         open: true
-    },
-    optimization: {
-        minimizer: [new UglifyJsPlugin()],
     },
     plugins: [
         new HtmlWebpackPlugin({

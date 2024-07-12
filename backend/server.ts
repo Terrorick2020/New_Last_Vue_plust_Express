@@ -1,6 +1,5 @@
 import express from 'express';
 import path from 'path';
-import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config({ path: 'backend/.env' });
 
@@ -20,7 +19,6 @@ const app = express();
 app.use( express.json() );
 app.use( express.urlencoded( { extended: true } ) )
 app.use( express.static( path.join( __dirname, '../frontend/dist' ) ) );
-app.use( cors() );
 
 app.use( bookRouter );
 app.use( apiRouter );

@@ -30,28 +30,28 @@ export default{
     addUser: async (pool: Pool, userData: { schema: string, login: string, email: string, password: string, role: string[] }) => {
         try {
             const checkUserQuery = `SELECT id FROM ${userData.schema} WHERE login=$1`;
-                const checkUserValues = [userData.login];
-                const checkUserRes = await pool.query(checkUserQuery, checkUserValues);
+            const checkUserValues = [userData.login];
+            const checkUserRes = await pool.query(checkUserQuery, checkUserValues);
 
-                if (checkUserRes && checkUserRes.rowCount !== null && checkUserRes.rowCount > 0) {
-                    return {
-                        result: 'error',
-                        code: 'user_exists',
-                        message: 'Пользователь с таким логином уже существует'
-                    };
-                }
+            if (checkUserRes && checkUserRes.rowCount !== null && checkUserRes.rowCount > 0) {
+                return {
+                    result: 'error',
+                    code: 'user_exists',
+                    message: 'Пользователь с таким логином уже существует'
+                };
+            }
 
-                if (!checkUserRes) {
-                    return {
-                        result: 'error',
-                        code: 'db_not_exists',
-                        message: 'не удалось подключиться к базе данных'
-                    };
-                }
+            if (!checkUserRes) {
+                return {
+                    result: 'error',
+                    code: 'db_not_exists',
+                    message: 'не удалось подключиться к базе данных'
+                };
+            }
 
             const hashedPassword = await bcrypt.hash(userData.password, 10);
-            const queryText = `INSERT INTO ${userData.schema} (login, email, password, role) VALUES ($1, $2, $3, $4) RETURNING *`;
-            const values = [userData.login, userData.email, hashedPassword, userData.role];
+            const queryText = `INSERT INTO ${userData.schema} (login, email, password, role, isvalid) VALUES ($1, $2, $3, $4, $5) RETURNING *`;
+            const values = [userData.login, userData.email, hashedPassword, userData.role, false];
             const res = await pool.query(queryText, values);
 
             if (res.rows.length > 0) {
@@ -101,5 +101,32 @@ export default{
             console.error(error);
             return { result: 'error' };
         }
+    },
+
+    verifyMail: async (pool: Pool, userData: { schema: string, id: number }) => {
+        try {
+            const queryText = `UPDATE ${userData.schema} SET isvalid=TRUE WHERE id=$1 RETURNING *`;
+            const res = await pool.query(queryText, [userData.id]);
+            
+            if (res.rowCount > 0) {
+                return {
+                    result: 'success',
+                    data: res.rows[0]
+                };
+            } else {
+                return {
+                    result: 'error',
+                    code: 'failed_checked_mail'
+                };
+            }
+        } catch (error) {
+            console.error('Возникла ошибка при работе с БД: PostgreSQL');
+            console.error(error);
+            return {
+                result: 'error',
+                code: 'database_error'
+            };
+        }
     }
+    
 };

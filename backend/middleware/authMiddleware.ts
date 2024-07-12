@@ -21,6 +21,9 @@ export default function (roles: Array<string>) {
             }
             
             const decodedToken = jwt.verifyAccessToken(token);
+            if (!decodedToken) {
+                return res.status(403).json({ message: "Неверный access_token" });
+            }
             const userRoles = decodedToken.role;
 
             const hasRole = roles.some(role => userRoles.includes(role));
