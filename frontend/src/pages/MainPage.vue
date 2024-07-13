@@ -1,5 +1,5 @@
 <template>
-    <Header :nav_attr="nav_attr" :btn_name="getAuthStatus ? alternate_btn_name : base_btn_name" />
+    <Header :nav_attr="nav_attr" :btn_name="getValidStatus ? alternate_btn_name : base_btn_name" />
     <div class="main">
         <Info />
         <Condition />
@@ -18,7 +18,7 @@ import { mapGetters } from 'vuex';
 export default {
     components: { Header, Info, Condition, Footer },
     computed: {
-        ...mapGetters([ 'getAuthStatus' ])
+        ...mapGetters([ 'getValidStatus' ])
     },
     data() {
         return {
@@ -27,7 +27,7 @@ export default {
                     name: 'О нас',
                     navHandler: () => {
                         window.scrollTo({
-                            top: window.outerHeight,
+                            top: document.documentElement.scrollHeight,
                             behavior: 'smooth'
                         });
                     }

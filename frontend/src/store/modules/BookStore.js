@@ -1,12 +1,39 @@
+import axios from 'axios';
+
+
 export default {
     actions: {
         bookToFavorite( context, id ) {
             context.commit( 'changeFavMarker', id );
+        },
+        async getBooks( context ) {
+            try {
+                const response = await axios.get( 'http://localhost:3000/books', {
+                    responseType: 'json'
+                } );
+
+                if( response.status === 200 && response.data.result === 'success' ) {
+                    context.commit( 'getBookList', response.data.data );
+                }
+            } catch ( error ) {
+                console.error( `Возникла ошибка при получении списка книг` );
+                console.info( error );
+            }
+        },
+        exitInSys( context ) {
+            context.commit( 'delData' );
         }
     },
     mutations: {
         changeFavMarker( state, id ) {
             state.book_list = state.book_list.map( book => book.id === id ? { ...book, is_favorite: !book.is_favorite } : book );
+        },
+        getBookList( state, paload ) {
+            state.book_list = paload;
+        },
+        delData( state ) {
+            state.book_list = [];
+            target_book = {};
         }
     },
     state: {
@@ -20,7 +47,7 @@ export default {
             {
                 id: 1,
                 is_favorite: false,
-                title: `Сети для самых маленьких`,
+                title: `Гнев человеческий`,
                 discription: `"Сети для самых маленьких" – это увлекательное введение в мир интернет-технологий, написанное специально для детей. Книга объясняет основы работы веб-сайтов, электронной почты, социальных сетей и многое другое в понятной и интересной форме. Читатели познакомятся с основными терминами и принципами, которые помогут им понять, как работают компьютеры и интернет.`,
             },
             {

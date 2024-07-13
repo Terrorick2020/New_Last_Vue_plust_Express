@@ -4,12 +4,12 @@
             <img src="../../assets/my_pet.png" alt="pet" class="magick__pet">
             <img src="../../assets/client_sms.png" alt="message" class="magick__sms">
         </div>
-        <div class="book__title">
+        <div class="book__title" id="book__title">
             <h1>Список всеми искаемой литературы</h1>
             <p>😇Здесь ты сможешь найти ответы на все свои вопросы, так что удачи тебе и терпения!</p>
         </div>
         <div class="books__content">
-            <div class="content__item" v-for="(elem, index) in getBookList" :key="elem.id">
+            <div v-if="getBookListWithQuery.length > 0" class="content__item" v-for="(elem, index) in getBookListWithQuery" :key="elem.id">
                 <div class="item__marker" @click="itemToFavorite(elem.id)">
                     <svg class="marker__default" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" v-if="elem.is_favorite">
                         <path d="M0 48C0 21.5 21.5 0 48 0l0 48V441.4l130.1-92.9c8.3-6 19.6-6 27.9 0L336 441.4V48H48V0H336c26.5 0 48 21.5 48 48V488c0 9-5 17.2-13 21.3s-17.6 3.4-24.9-1.8L192 397.5 37.9 507.5c-7.3 5.2-16.9 5.9-24.9 1.8S0 497 0 488V48z"/>
@@ -27,12 +27,16 @@
                     </svg>
                 </router-link>
             </div>
+            <div v-else class="content__item-error">
+                <p>Здесь пока ничего нет!</p>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 export default {
+    props: [ 'globalQuery' ],
     data() {
         return {
             baseCount: 6
@@ -45,10 +49,21 @@ export default {
     },
     computed: {
         getBookList() {
-            return this.$store.getters.getBookList
+            return this.$store.getters.getBookList;
+        },
+        getBookListWithQuery() {
+            var response = this.getBookList;
+            if (this.globalQuery) {
+                response = response.filter(elem => 
+                    elem.title !== undefined && elem.title.includes(this.globalQuery) ||
+                    elem.description !== undefined && elem.description.includes(this.globalQuery)
+                );
+            }
+            return response;
         }
     }
 }
+
 </script>
 
 <style lang="scss" scoped>
@@ -91,6 +106,7 @@ export default {
             margin-top: 25px;
             width: 100%;
             margin-left: 15%;
+            font-size: 18px;
         }
     }
 
@@ -187,6 +203,20 @@ export default {
                     height: auto;
                 }
             }
+        }
+
+        .content__item-error {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 5px 10px;
+            height: 100px;
+            font-size: 30px;
+            background: transparent;
+            backdrop-filter: blur(20px);
+            border: 2px solid rgb(185, 185, 185);
+            border-radius: 10px;
         }
     }
 }

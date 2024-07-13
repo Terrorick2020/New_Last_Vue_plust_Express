@@ -1,7 +1,7 @@
 <template>
-    <AccountHeader :nav_attr="nav_attr" :btn_name="btn_name" />
+    <AccountHeader :nav_attr="nav_attr" :btn_name="btn_name" @update:globalQuery="handlerQuery" />
     <div class="client">
-        <Books />
+        <Books :globalQuery="globalQuery" />
         <Footer />
     </div>
 </template>
@@ -38,7 +38,13 @@ export default {
             btn_name: {
                 name: 'Главная',
                 path: '/authorization'
-            }
+            },
+            globalQuery: undefined
+        }
+    },
+    methods: {
+        handlerQuery(newQuery) {
+            this.globalQuery = newQuery;
         }
     }
 }

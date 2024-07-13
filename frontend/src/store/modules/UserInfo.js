@@ -11,7 +11,7 @@ export default {
                     }
                 });
 
-                if( response.data.result === "success" && response.data.AccessToken && response.data.RefreshToken && !response.data.code ) {
+                if( response.data.AccessToken && response.status === 200 ) {
                     payload.push( response.data );
                     context.commit( 'updateUserInfo', payload );
                 }
@@ -28,9 +28,10 @@ export default {
                     }
                 });
 
-                if( response.data.result === 'success' && response.data.accessToken && !response.data.code ) {
+                if( response.data.AccessToken && response.status === 200 ) {
                     payload.push( response.data );
                     context.commit( 'updateUserInfo', payload );
+                    context.commit( 'updateValid' );
                 }
             } catch ( error ) {
                 console.error( `Возникла ошибка при авторизации пользователя!` );
@@ -43,7 +44,7 @@ export default {
                     responseType: 'json'
                 });
 
-                if( response.data.isValid && response.data.result === 'success' ) {
+                if( response.data.isvalid && response.data.result === "success" ) {
                     context.commit( 'updateValid' );
                 }
             } catch ( error ) {
@@ -66,12 +67,11 @@ export default {
 
             state.user_info.username = payload[0].login;
             state.user_info.email = payload[0].email;
-            state.user_info.role = payload[0].role ? payload[0].role : [ 'USER' ]
+            state.user_info.role = payload[0].role ? payload[0].role : payload[2].role;
 
             state.user_info.remember_me = payload[1];
 
-            state.user_info.accessToken = payload[2].AccessToken;
-            state.user_info.refreshToken = payload[2].RefreshToken;
+            state.user_info.AccessToken = payload[2].AccessToken;
         },
         resetAuth( state ) {
             state.user_info.isAuth = false;
@@ -85,13 +85,15 @@ export default {
                 role: undefined,
                 remember_me: undefined,
                 isAuth: false,
-                isValid: true
+                isValid: false
             };
             state.user_icon = undefined;
         },
         updateValid( state ) {
-            state.user_info.isAuth = false;
-            state.user_info.isValid = true;
+            if( !state.user_info.isValid ) {
+                state.user_info.isAuth = false;
+                state.user_info.isValid = true;
+            }
         }
     },
     state: {
@@ -112,6 +114,6 @@ export default {
         getUserIcon: state => state.user_icon,
         getValidStatus: state => state.user_info.isValid,
         getAuthStatus: state => state.user_info.isAuth,
-        getTokenStatus: state => state.user_info.AccessToken && state.user_info.AccessToken
+        getTokenStatus: state => Boolean( state.user_info.AccessToken )
     }
 }

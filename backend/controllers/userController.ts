@@ -43,7 +43,9 @@ export default {
     verifyMail: async (req: Request, res: Response) => {
         try {
             const RefreshToken = req.params.token;
-            const UserId = await jwt.verifyRefreshTokenFromMail(RefreshToken);
+            
+            const UserId = await jwt.verifyRefreshTokenFromMail(RefreshToken);7
+            
             req.body.id = UserId;
             user_config = { ...user_config, ...req.body };
             const pool = await db_connection.connectToPostgresDB(pool_config);

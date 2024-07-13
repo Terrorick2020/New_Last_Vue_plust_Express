@@ -42,13 +42,14 @@ export default {
 
                     if( this.getValidStatus ) {
                         setTimeout( () => {
+                            clearInterval(intervalId);
                             this.$router.push('/client');
                         }, 2_000 )
                     }
                 } catch (error) {
                     console.error('Error during authorization check:', error);
                 }
-            }, 2_000);
+            }, 4_000);
 
             setTimeout( () => {
                 clearInterval(intervalId);

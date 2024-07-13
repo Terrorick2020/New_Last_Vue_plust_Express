@@ -21,7 +21,7 @@ export default {
                     name: 'О нас',
                     navHandler: () => {
                         window.scrollTo({
-                            top: window.outerHeight,
+                            top: document.documentElement.scrollHeight,
                             behavior: 'smooth'
                         });
                     }
