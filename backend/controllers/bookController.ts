@@ -2,14 +2,17 @@ import { Request, Response } from "express";
 import dotenv from 'dotenv';
 import db_connection from '../config/dbConnection';
 import bookManager from "../config/bookManager";
+import bigBookManager from "../config/bigBookManager";
 
 dotenv.config();
 
 let pool_config = JSON.parse(process.env.POSTGRES_CONFIG || '{"config":"undefined"}');
 let user_config = JSON.parse(process.env.USER_CONFIG || '{"config":"undefined"}');
 let book_config = JSON.parse(process.env.BOOK_CONFIG || '{"config": "undefined"}');
+let big_book_config = JSON.parse(process.env.BIG_BOOK_CONFIG || '{"config": "undefined"}');
 
-if (pool_config.config === "undefined" || user_config.config === "undefined" || book_config.config === "undefined") {
+if (pool_config.config === "undefined" || user_config.config === "undefined" ||
+     book_config.config === "undefined"  || big_book_config.config === "undefined") {
     throw new Error(`Ошибка конфигурации контроллера!`);
 }
  
@@ -17,7 +20,9 @@ if (pool_config.config === "undefined" || user_config.config === "undefined" || 
 export default {
     getAllBooks: async (req: Request, res: Response) => {
         try {
-            book_config = { ...book_config, ...req.body };
+            const { text, ...bodyWithoutText } = req.body;
+            book_config = { ...book_config, ...bodyWithoutText };
+            big_book_config = { ...big_book_config, ...text };
 
             const pool = await db_connection.connectToPostgresDB(pool_config);
 
@@ -44,6 +49,7 @@ export default {
         try {
             const book_id = {id: req.params.id}
             book_config = { ...book_config, ...book_id };
+            big_book_config = { ...big_book_config, ...book_id };
 
             const pool = await db_connection.connectToPostgresDB(pool_config);
 
@@ -51,7 +57,10 @@ export default {
                 throw Error(`Возникла ошибка: объект pool: ${pool}! Не получается подключиться к бд: PostgreSQL!`);
             }
 
-            const result = await bookManager.getBookByID(pool, book_config);
+            let result = await bookManager.getBookByID(pool, book_config);
+            let result_text = await bigBookManager.getBigBookByID(pool, big_book_config);
+            result = { ...result, ...result_text };
+
 
             if (result.result === 'success') {
                 res.status(200).json(result);
@@ -68,7 +77,9 @@ export default {
 
     addBook: async (req: Request, res: Response) => {
         try {
-            book_config = { ...book_config, ...req.body };
+            const { text, ...bodyWithoutText } = req.body;
+            book_config = { ...book_config, ...bodyWithoutText };
+            big_book_config = { ...big_book_config, ...text }
 
             const pool = await db_connection.connectToPostgresDB(pool_config);
 
@@ -76,7 +87,9 @@ export default {
                 throw Error(`Возникла ошибка: объект pool: ${pool}! Не получается подключиться к бд: PostgreSQL!`);
             }
 
-            const result = await bookManager.add_book(pool, book_config);
+            let result = await bookManager.add_book(pool, book_config);
+            let result_text = await bigBookManager.add_big_book(pool, big_book_config);
+            result = { ...result, ...result_text };
 
             if (result.result === 'success') {
                 res.status(200).json(result);
@@ -95,6 +108,7 @@ export default {
         try {
             const book_id = {id: req.params.id}
             book_config = { ...book_config, ...book_id };
+            big_book_config = { ...big_book_config, ...book_id };
 
             const pool = await db_connection.connectToPostgresDB(pool_config);
 
@@ -102,7 +116,9 @@ export default {
                 throw Error(`Возникла ошибка: объект pool: ${pool}! Не получается подключиться к бд: PostgreSQL!`);
             }
 
-            const result = await bookManager.delete_book(pool, book_config);
+            let result = await bookManager.delete_book(pool, book_config);
+            let result_text = await bigBookManager.delete_big_book(pool, big_book_config);
+            result = { ...result, ...result_text };
 
             if (result.result === 'success') {
                 res.status(200).json(result);
@@ -121,7 +137,7 @@ export default {
         try {
             const bookId = Number(req.params.id);
             const updates = req.body;
-    
+            
             if (!Object.keys(updates).length) {
                 return res.status(400).json({ 'result': 'book_error', 'code': 'no_update_data' });
             }
