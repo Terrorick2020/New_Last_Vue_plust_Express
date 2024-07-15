@@ -6,13 +6,11 @@ export default {
             const queryText = `INSERT INTO ${bigBookData.schema} (book_text, book_id) VALUES ($1, $2) RETURNING *`;
             const values = [bigBookData.book_text, bigBookData.book_id];
             const res = await pool.query(queryText, values);
-            console.log(bigBookData.book_id)
-            console.log(bigBookData.book_text)
 
             if (res.rows.length > 0) {
                 return {
                     result: 'success',
-                    detail: res.rows[0]
+                    data: res.rows[0]
                 };
             } else {
                 return {
@@ -89,7 +87,7 @@ export default {
             const queryText = `SELECT * FROM ${bigBookData.schema} WHERE book_id = $1`;
             const values = [bigBookData.book_id];
             const res = await pool.query(queryText, values);
-            
+
             if (res.rows.length > 0) {
                 return {
                     result: 'success',

@@ -41,7 +41,11 @@ export default {
                 console.log(AccessToken);
                 console.log(RefreshToken);
                 res.status(200).cookie('Access', AccessToken, { maxAge: 9000000, httpOnly: true, secure: true })
+<<<<<<< HEAD
                 .cookie('Refresh', RefreshToken, { maxAge: 9000000, httpOnly: true, secure: true }).send({AccessToken});
+=======
+                .cookie('Refresh', RefreshToken, { maxAge: 9000000, httpOnly: true, secure: true }).send({payload});
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
             } else {
                 res.status(401).json({ 'result': 'authorization_error' });
             }

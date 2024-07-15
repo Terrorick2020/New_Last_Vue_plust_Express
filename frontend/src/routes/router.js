@@ -35,17 +35,29 @@ router.beforeEach( (to, from, next) => {
 
         if( to.path === '/authorization/confirm' ) {
             next();
+<<<<<<< HEAD
             if( to.meta.needAuth && store.getters.getTokenStatus && store.getters.getAuthStatus ) {
+=======
+            if( to.meta.needAuth && store.getters.getAuthStatus ) {
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
                 next(); 
             } else {
                 next( { path: '/error', replace: true } );
             }
         } else {
+<<<<<<< HEAD
             if( to.path === '/authorization' && store.getters.getValidStatus && store.getters.getTokenStatus ) {
                 next( { path: '/client', replace: true } );
             }
 
             if( to.meta.needAuth && ( !store.getters.getValidStatus || !store.getters.getTokenStatus ) ) {
+=======
+            if( to.path === '/authorization' && store.getters.getValidStatus ) {
+                next( { path: '/client', replace: true } );
+            }
+
+            if( to.meta.needAuth && !store.getters.getValidStatus ) {
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
                 next( { path: '/authorization', replace: true } ); 
             } else {
                 next();

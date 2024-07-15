@@ -43,4 +43,11 @@ a {
     font-weight: 500;
     cursor: pointer;
 }
+<<<<<<< HEAD
+=======
+
+button {
+    cursor: pointer;
+}
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
 </style>

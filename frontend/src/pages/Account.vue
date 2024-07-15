@@ -1,7 +1,13 @@
 <template>
+<<<<<<< HEAD
     <AccountHeader :nav_attr="nav_attr" :btn_name="btn_name" />
     <div class="client">
         <Books />
+=======
+    <AccountHeader :nav_attr="nav_attr" :btn_name="btn_name" :searchFunction="searchFunction" @update:globalQuery="handlerQuery" />
+    <div class="client">
+        <Books :globalQuery="globalQuery" />
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
         <Footer />
     </div>
 </template>
@@ -13,7 +19,15 @@ import Footer from './components/Footer.vue';
 
 
 export default {
+<<<<<<< HEAD
     components: { AccountHeader, Books, Footer },
+=======
+    name: 'Account',
+    components: { AccountHeader, Books, Footer },
+    mounted() {
+        this.loadBooks()
+    },
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
     data() {
         return {
             nav_attr: [
@@ -38,6 +52,26 @@ export default {
             btn_name: {
                 name: 'Главная',
                 path: '/authorization'
+<<<<<<< HEAD
+=======
+            },
+            searchFunction: () => {
+                document.getElementById("book__title").scrollIntoView({ behavior: 'smooth' });
+            },
+            globalQuery: undefined
+        }
+    },
+    methods: {
+        handlerQuery(newQuery) {
+            this.globalQuery = newQuery;
+        },
+        async loadBooks() {
+            try {
+                await this.$store.dispatch( 'loadBooks' );
+            } catch ( error ) {
+                console.error( `Возникла ошибки при подгрушзке данных на страницу!` );
+                console.info( error );
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
             }
         }
     }

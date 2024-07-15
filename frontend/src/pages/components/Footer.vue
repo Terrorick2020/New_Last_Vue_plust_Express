@@ -16,7 +16,11 @@ export default {
 
 <style lang="scss" scoped>
 .footer {
+<<<<<<< HEAD
     margin-top: 50px;
+=======
+    margin-top: 70px;
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
     display: flex;
     justify-content: center;
     position: relative;

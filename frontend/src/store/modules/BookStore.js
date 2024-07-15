@@ -1,12 +1,186 @@
+<<<<<<< HEAD
+=======
+import axios from 'axios';
+
+
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
 export default {
     actions: {
         bookToFavorite( context, id ) {
             context.commit( 'changeFavMarker', id );
+<<<<<<< HEAD
+=======
+        },
+        async loadBooks( context ) {
+            try {
+                const response = await axios.get( 'http://localhost:3000/books', {
+                    responseType: 'json'
+                } );
+
+                if( response.status === 200 && response.data.result === 'success' ) {
+                    context.commit( 'getBookList', response.data.data );
+                }
+            } catch ( error ) {
+                console.error( `Возникла ошибка при получении списка книг` );
+                console.info( error );
+            }
+        },
+        async getFullBook(context, book_id) {
+            try {
+                const response = await axios.get( `http://localhost:3000/books/${book_id}`, {
+                    responseType: 'json'
+                } );
+
+                if( response.status === 200 && response.data ) {
+                    context.commit( 'getTargetBook', response.data.book_text )
+                }
+            } catch ( error ) {
+                console.error( `Возникла ошибка при загрузкетекста книги!` );
+                console.info( error );
+            }
+        },
+        titleEditor( context, new_title ) {
+            try {
+                const response = axios.put( `http://localhost:3000/books/${context.getters.getIdTargetBook}`,{
+                    "title": String( new_title )
+                });
+                if( response.status === 200 ) {
+                    context.commit( 'editTitle', new_title );
+                }
+                // context.commit( 'editTitle', new_title );
+
+            } catch ( error ) {
+                console.error( `Возникла ошибка при изменении заглавия книги` );
+                console.log( error );
+            }
+        },
+        authorInfoEditor( context, new_author_info ) {
+            try {
+                const response = axios.put( `http://localhost:3000/books/${context.getters.getIdTargetBook}`, new_author_info );
+                if( response.status === 200 ) {
+                    context.commit( 'editInfo', new_author_info );
+                }
+                // context.commit( 'editInfo', new_author_info );
+
+            } catch ( error ) {
+                console.error( `Возникла ошибка при изменении информации об авторе книги` );
+                console.log( error );
+            }
+        },
+        descriptionEditor( context, new_description ) {
+            try {
+                const response = axios.put( `http://localhost:3000/books/${context.getters.getIdTargetBook}`,{
+                    "description": String( new_description )
+                });
+                if( response.status === 200 ) {
+                    context.commit( 'editDescription', new_description );
+                }
+                // context.commit( 'editDescription', new_description );
+
+            } catch ( error ) {
+                console.error( `Возникла ошибка при изменении описания книги` );
+                console.log( error );
+            }
+        },
+        textEditor( context, new_text ) {
+            try {
+                context.commit( 'editText', new_text );
+
+            } catch ( error ) {
+                console.error( `Возникла ошибка при изменении текста книги` );
+                console.log( error );
+            }
+        },
+        addBookInList( context ) {
+            try {
+                const response = axios.post( `http://localhost:3000/books/${context.getters.getIdTargetBook}`,{
+                    "title": "",
+                    "publication": 3,
+                    "year": 1987,
+                    "author_name": "А. Плющев",
+                    "description": "",
+                    "user_id": context.getters.getUserId
+                });
+                if( response.status === 200 ) {
+                    context.commit( 'addBook' );
+                }
+                // context.commit( 'addBook' );
+
+            } catch ( error ) {
+                console.error( `Возникла ошибка при создании новой книги` );
+                console.log( error );
+            }
+        },
+        deleteBook( context, book_id ) {
+            try {
+                const response = axios.delete( `http://localhost:3000/books/${book_id}` );
+                if( response.status === 200 ) {
+                    context.commit( 'delBook', book_id );
+                }
+                // context.commit( 'delBook', book_id );
+            } catch ( error ) {
+                console.error( `Возникла ошибка при удалении книги` );
+                console.log( error );
+            }
+        },
+        exitInSys( context ) {
+            context.commit( 'delData' );
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
         }
     },
     mutations: {
         changeFavMarker( state, id ) {
             state.book_list = state.book_list.map( book => book.id === id ? { ...book, is_favorite: !book.is_favorite } : book );
+<<<<<<< HEAD
+=======
+        },
+        getBookList( state, paload ) {
+            state.book_list = paload.map( elem => ({ ...elem, is_favorite: false }) );
+        },
+        getTargetBook( state, paload ) {
+            state.target_book = paload;
+        },
+        delData( state ) {
+            state.book_list = [];
+            target_book = {};
+        },
+        editTitle( state, new_title ) {
+            state.target_book.title = new_title;
+        },
+        editInfo( state, new_author_info ) {
+            state.target_book.publication = new_author_info.publication;
+            state.target_book.year = new_author_info.year;
+            state.target_book.author_name = new_author_info.author_name;
+        },
+        editDescription( state, new_description ) {
+            state.target_book.description = new_description;
+        },
+        editText( state, new_text ) {
+            state.target_book.text = new_text;
+        },
+        addBook( state ) {
+            const sorted_array = state.book_list.sort((a, b) => a.id - b.id);
+            const last_array_index = sorted_array.length -1;
+            const new_id = sorted_array[ last_array_index ].id + 1;
+            state.book_list.push( 
+                {
+                    id: new_id,
+                    is_favorite: false,
+                    title: '',
+                    author_name: '',
+                    description: ''
+                }
+            );
+            state.target_book = {
+                id: new_id,
+                title: '',
+                description: '',
+                text: ''
+            }
+        },
+        delBook( state, book_id ) {
+            state.book_list = state.book_list.filter(elem => elem.id !== book_id)
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
         }
     },
     state: {
@@ -15,50 +189,107 @@ export default {
                 id: 0,
                 is_favorite: true,
                 title: `Сети для самых маленьких`,
+<<<<<<< HEAD
                 discription: `"Сети для самых маленьких" – это увлекательное введение в мир интернет-технологий, написанное специально для детей. Книга объясняет основы работы веб-сайтов, электронной почты, социальных сетей и многое другое в понятной и интересной форме. Читатели познакомятся с основными терминами и принципами, которые помогут им понять, как работают компьютеры и интернет.`,
+=======
+                publication: 3,
+                year: 1987,
+                author_name: "А. Смурф",
+                description: `"Сети для самых маленьких" – это увлекательное введение в мир интернет-технологий, написанное специально для детей. Книга объясняет основы работы веб-сайтов, электронной почты, социальных сетей и многое другое в понятной и интересной форме. Читатели познакомятся с основными терминами и принципами, которые помогут им понять, как работают компьютеры и интернет.`,
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
             },
             {
                 id: 1,
                 is_favorite: false,
+<<<<<<< HEAD
                 title: `Сети для самых маленьких`,
                 discription: `"Сети для самых маленьких" – это увлекательное введение в мир интернет-технологий, написанное специально для детей. Книга объясняет основы работы веб-сайтов, электронной почты, социальных сетей и многое другое в понятной и интересной форме. Читатели познакомятся с основными терминами и принципами, которые помогут им понять, как работают компьютеры и интернет.`,
+=======
+                title: `Гнев человеческий`,
+                publication: 3,
+                year: 1987,
+                author_name: "А. Смурф",
+                description: `"Сети для самых маленьких" – это увлекательное введение в мир интернет-технологий, написанное специально для детей. Книга объясняет основы работы веб-сайтов, электронной почты, социальных сетей и многое другое в понятной и интересной форме. Читатели познакомятся с основными терминами и принципами, которые помогут им понять, как работают компьютеры и интернет.`,
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
             },
             {
                 id: 2,
                 is_favorite: true,
                 title: `Сети для самых маленьких`,
+<<<<<<< HEAD
                 discription: `"Сети для самых маленьких" – это увлекательное введение в мир интернет-технологий, написанное специально для детей. Книга объясняет основы работы веб-сайтов, электронной почты, социальных сетей и многое другое в понятной и интересной форме. Читатели познакомятся с основными терминами и принципами, которые помогут им понять, как работают компьютеры и интернет.`,
+=======
+                publication: 3,
+                year: 1987,
+                author_name: "А. Смурф",
+                description: `"Сети для самых маленьких" – это увлекательное введение в мир интернет-технологий, написанное специально для детей. Книга объясняет основы работы веб-сайтов, электронной почты, социальных сетей и многое другое в понятной и интересной форме. Читатели познакомятся с основными терминами и принципами, которые помогут им понять, как работают компьютеры и интернет.`,
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
             },
             {
                 id: 3,
                 is_favorite: false,
                 title: `Сети для самых маленьких`,
+<<<<<<< HEAD
                 discription: `"Сети для самых маленьких" – это увлекательное введение в мир интернет-технологий, написанное специально для детей. Книга объясняет основы работы веб-сайтов, электронной почты, социальных сетей и многое другое в понятной и интересной форме. Читатели познакомятся с основными терминами и принципами, которые помогут им понять, как работают компьютеры и интернет.`,
+=======
+                publication: 3,
+                year: 1987,
+                author_name: "А. Смурф",
+                description: `"Сети для самых маленьких" – это увлекательное введение в мир интернет-технологий, написанное специально для детей. Книга объясняет основы работы веб-сайтов, электронной почты, социальных сетей и многое другое в понятной и интересной форме. Читатели познакомятся с основными терминами и принципами, которые помогут им понять, как работают компьютеры и интернет.`,
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
             },
             {
                 id: 4,
                 is_favorite: true,
                 title: `Сети для самых маленьких`,
+<<<<<<< HEAD
                 discription: `"Сети для самых маленьких" – это увлекательное введение в мир интернет-технологий, написанное специально для детей. Книга объясняет основы работы веб-сайтов, электронной почты, социальных сетей и многое другое в понятной и интересной форме. Читатели познакомятся с основными терминами и принципами, которые помогут им понять, как работают компьютеры и интернет.`,
+=======
+                publication: 3,
+                year: 1987,
+                author_name: "А. Смурф",
+                description: `"Сети для самых маленьких" – это увлекательное введение в мир интернет-технологий, написанное специально для детей. Книга объясняет основы работы веб-сайтов, электронной почты, социальных сетей и многое другое в понятной и интересной форме. Читатели познакомятся с основными терминами и принципами, которые помогут им понять, как работают компьютеры и интернет.`,
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
             },
             {
                 id: 5,
                 is_favorite: false,
                 title: `Сети для самых маленьких`,
+<<<<<<< HEAD
                 discription: `"Сети для самых маленьких" – это увлекательное введение в мир интернет-технологий, написанное специально для детей. Книга объясняет основы работы веб-сайтов, электронной почты, социальных сетей и многое другое в понятной и интересной форме. Читатели познакомятся с основными терминами и принципами, которые помогут им понять, как работают компьютеры и интернет.`,
+=======
+                publication: 3,
+                year: 1987,
+                author_name: "А. Смурф",
+                description: `"Сети для самых маленьких" – это увлекательное введение в мир интернет-технологий, написанное специально для детей. Книга объясняет основы работы веб-сайтов, электронной почты, социальных сетей и многое другое в понятной и интересной форме. Читатели познакомятся с основными терминами и принципами, которые помогут им понять, как работают компьютеры и интернет.`,
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
             },
             {
                 id: 6,
                 is_favorite: false,
                 title: `Сети для самых маленьких`,
+<<<<<<< HEAD
                 discription: `"Сети для самых маленьких" – это увлекательное введение в мир интернет-технологий, написанное специально для детей. Книга объясняет основы работы веб-сайтов, электронной почты, социальных сетей и многое другое в понятной и интересной форме. Читатели познакомятся с основными терминами и принципами, которые помогут им понять, как работают компьютеры и интернет.`,
+=======
+                publication: 3,
+                year: 1987,
+                author_name: "А. Смурф",
+                description: `"Сети для самых маленьких" – это увлекательное введение в мир интернет-технологий, написанное специально для детей. Книга объясняет основы работы веб-сайтов, электронной почты, социальных сетей и многое другое в понятной и интересной форме. Читатели познакомятся с основными терминами и принципами, которые помогут им понять, как работают компьютеры и интернет.`,
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
             }
         ],
         target_book: {
             id: 2,
             title: `Война и мир`,
+<<<<<<< HEAD
             discription: `Война — это вооруженный конфликт между двумя или более группами людей, обычно государствами, с целью достижения политических, экономических или идеологических целей. Войны могут происходить на различных уровнях — от межличностных стычек до глобальных войн, охватывающих множество стран и народов. Они приводят к большим человеческим потерям, разрушению инфраструктуры и долгосрочным последствиям для обществ и окружающей среды.
 
+=======
+            publication: 3,
+            year: 1987,
+            author_name: "А. Смурф",
+            description: `Война — это вооруженный конфликт между двумя или более группами людей, обычно государствами, с целью достижения политических, экономических или идеологических целей. Войны могут происходить на различных уровнях — от межличностных стычек до глобальных войн, охватывающих множество стран и народов. Они приводят к большим человеческим потерям, разрушению инфраструктуры и долгосрочным последствиям для обществ и окружающей среды.
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
 Мир — это состояние мира, гармонии и согласия между людьми и нациями. Мир подразумевает отсутствие военных действий, конфликтов и напряженности. Цель многих международных организаций и инициатив, таких как Организация Объединенных Наций (ООН), состоит в поддержании мира и предотвращении войн. Мир также связан с развитием международного сотрудничества, взаимопонимания и уважения прав человека.`,
             text: `Лев Толстой
 ВОЙНА И МИР
@@ -114,7 +345,18 @@ I
             return isFavoriteItem.concat( isNotFavoriteItem ).reverse()
         },
         getTitleTargetBook: state => state.target_book.title,
+<<<<<<< HEAD
         getDiscriptionTargetBook: state => state.target_book.discription,
         getTextTargetBook: state => state.target_book.text
+=======
+        getDescriptionTargetBook: state => state.target_book.description,
+        getTextTargetBook: state => state.target_book.text,
+        getIdTargetBook: state => state.target_book.id,
+        getAuthorInfor: state => ({
+            'publication': state.target_book.publication,
+            'year': state.target_book.year,
+            'author_name': state.target_book.author_name,
+        })
+>>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
     }
 }
