@@ -21,11 +21,7 @@ export default {
                     name: 'О нас',
                     navHandler: () => {
                         window.scrollTo({
-<<<<<<< HEAD
-                            top: window.outerHeight,
-=======
                             top: document.documentElement.scrollHeight,
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
                             behavior: 'smooth'
                         });
                     }

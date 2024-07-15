@@ -15,11 +15,7 @@
             <div class="tools__nav"></div>
             <div class="tools__persone">
                 <div class="persone__search">
-<<<<<<< HEAD
-                    <input type="text">
-=======
                     <input id="search" type="text" @focus="searchFunction" @input="updateGlobalQueery" v-model="localQuery">
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
                     <button>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                             <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
@@ -32,22 +28,13 @@
                         <path d="M64 64C46.3 64 32 78.3 32 96l0 320c0 17.7 14.3 32 32 32l320 0c17.7 0 32-14.3 32-32l0-320c0-17.7-14.3-32-32-32L64 64zM0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zm235 81.6L288 224l52.2-10.4c-2.6-3.9-4.2-8.5-4.2-13.6c0-13.3 10.7-24 24-24s24 10.7 24 24c0 13-10.3 23.6-23.2 24L304.5 349.1c-5.2 11.5-16.6 18.9-29.2 18.9l-102.6 0c-12.6 0-24-7.4-29.2-18.9L87.2 224C74.3 223.6 64 213 64 200c0-13.3 10.7-24 24-24s24 10.7 24 24c0 5-1.5 9.7-4.2 13.6L160 224l53.1-46.4c-8.9-4.1-15-13.1-15-23.6c0-14.4 11.6-26 26-26s26 11.6 26 26c0 10.5-6.2 19.5-15.1 23.6z"/>
                     </svg>
                     <div v-show="mouseOnVidgetIcon || mouseOnVidgetNavBlock" class="vidget__nav" @mouseover="vidgetBlockOver" @mouseout="vidgetBlockOut">
-<<<<<<< HEAD
-                        <router-link @click="aboutUs">О нас</router-link>
-                        <router-link title="В разработке">Личная информация</router-link>
-=======
                         <a to="" @click="aboutUs">О нас</a>
                         <a title="В разработке">Личная информация</a>
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
                         <router-link to="/" @click="exitFromSys">Выход</router-link>
                     </div>
                 </div>
                 <div class="persone__icon">
-<<<<<<< HEAD
-                    <img v-if="userIcon !== ''" src="" alt="">
-=======
                     <img v-if="userIcon" src="" alt="">
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
                     <h3 v-else>{{ userName[0] }}</h3>
                 </div>
             </div>
@@ -59,13 +46,6 @@ import { mapActions } from 'vuex';
 
 
 export default {
-<<<<<<< HEAD
-    props: ['nav_attr', 'btn_name'],
-    data() {
-        return {
-            mouseOnVidgetIcon: false,
-            mouseOnVidgetNavBlock: false
-=======
     name: 'AccountHeader',
     props: ['nav_attr', 'btn_name', 'searchFunction', 'globalQuery'],
     data() {
@@ -73,7 +53,6 @@ export default {
             mouseOnVidgetIcon: false,
             mouseOnVidgetNavBlock: false,
             localQuery: this.globalQuery || ''
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
         }
     },
     computed: {
@@ -99,11 +78,6 @@ export default {
         ...mapActions( [ 'exitFromSys' ] ),
         aboutUs() {
             window.scrollTo({
-<<<<<<< HEAD
-                top: window.outerHeight,
-                behavior: 'smooth'
-            });
-=======
                 top: document.documentElement.scrollHeight,
                 behavior: 'smooth'
             });
@@ -111,7 +85,6 @@ export default {
         updateGlobalQueery() {
             this.$emit('update:globalQuery', this.localQuery);
             console.log( this.globalQuery );
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
         }
     }
 }
@@ -132,11 +105,7 @@ $main-color: rgb(210, 210, 210);
     z-index: 99;
     background-blend-mode: multiply;
     background: transparent;
-<<<<<<< HEAD
-    background-color: rgba(42, 37, 64, 0.3);
-=======
     background-color: rgba(29, 25, 47, 0.5);
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
     box-shadow: 0 0 4px white;
 
     .header__logo {

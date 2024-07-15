@@ -4,19 +4,11 @@
             <img src="../../assets/my_pet.png" alt="pet" class="magick__pet">
             <img src="../../assets/client_sms.png" alt="message" class="magick__sms">
         </div>
-<<<<<<< HEAD
-        <div class="book__title">
-=======
         <div class="book__title" id="book__title">
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
             <h1>Список всеми искаемой литературы</h1>
             <p>😇Здесь ты сможешь найти ответы на все свои вопросы, так что удачи тебе и терпения!</p>
         </div>
         <div class="books__content">
-<<<<<<< HEAD
-            <div class="content__item" v-for="(elem, index) in getBookList" :key="elem.id">
-                <div class="item__marker" @click="itemToFavorite(elem.id)">
-=======
             <div v-if="getBookListWithQuery.length > 0" class="content__item" v-for="(elem, index) in getBookListWithQuery" :key="elem.id">
                 <button v-if="getAbilityEdit" @click="deletBook( elem.id )" class="item__deleter" title="Удалить книгу">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -24,7 +16,6 @@
                     </svg>
                 </button>
                 <div v-else class="item__marker" @click="itemToFavorite(elem.id)" title="Изменить приоритете книги">
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
                     <svg class="marker__default" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" v-if="elem.is_favorite">
                         <path d="M0 48C0 21.5 21.5 0 48 0l0 48V441.4l130.1-92.9c8.3-6 19.6-6 27.9 0L336 441.4V48H48V0H336c26.5 0 48 21.5 48 48V488c0 9-5 17.2-13 21.3s-17.6 3.4-24.9-1.8L192 397.5 37.9 507.5c-7.3 5.2-16.9 5.9-24.9 1.8S0 497 0 488V48z"/>
                     </svg>
@@ -33,22 +24,14 @@
                     </svg>
                 </div>
                 <h4 class="item__title">{{ elem.title }}</h4>
-<<<<<<< HEAD
-                <p class="item__description">{{ elem.discription }}</p>
-                <router-link to="/client/book" class="item__link">
-=======
                 <p class="item__description">{{ elem.description }}</p>
                 <router-link @click="openFullVersion( elem.id )" to="/client/book" class="item__link">
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
                     <p>Читать полностью</p>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                         <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
                     </svg>
                 </router-link>
             </div>
-<<<<<<< HEAD
-        </div>
-=======
             <div v-else class="content__item-error">
                 <p>Здесь пока ничего нет!</p>
             </div>
@@ -58,16 +41,12 @@
                 <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
             </svg>
         </button>
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
     </div>
 </template>
 
 <script>
 export default {
-<<<<<<< HEAD
-=======
     props: [ 'globalQuery' ],
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
     data() {
         return {
             baseCount: 6
@@ -76,8 +55,6 @@ export default {
     methods: {
         itemToFavorite(id) {
             this.$store.dispatch( 'bookToFavorite', id );
-<<<<<<< HEAD
-=======
         },
         deletBook( id ) {
             this.$store.dispatch( 'deleteBook', id );
@@ -88,17 +65,10 @@ export default {
         addBook() {
             this.$store.dispatch( 'addBookInList' );
             this.$router.push( '/client/book' );
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
         }
     },
     computed: {
         getBookList() {
-<<<<<<< HEAD
-            return this.$store.getters.getBookList
-        }
-    }
-}
-=======
             return this.$store.getters.getBookList;
         },
         getBookListWithQuery() {
@@ -117,7 +87,6 @@ export default {
     }
 }
 
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
 </script>
 
 <style lang="scss" scoped>
@@ -160,10 +129,7 @@ export default {
             margin-top: 25px;
             width: 100%;
             margin-left: 15%;
-<<<<<<< HEAD
-=======
             font-size: 18px;
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
         }
     }
 
@@ -198,8 +164,6 @@ export default {
                 justify-self: center;
             }
 
-<<<<<<< HEAD
-=======
             .item__deleter {
                 width: 30px;
                 height: auto;
@@ -216,7 +180,6 @@ export default {
                 }
             }
 
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
             .item__marker {
                 position: absolute;
                 top: 1px;
@@ -280,8 +243,6 @@ export default {
                 }
             }
         }
-<<<<<<< HEAD
-=======
 
         .content__item-error {
             display: flex;
@@ -317,7 +278,6 @@ export default {
             width: 40px;
             height: 40px;
         }
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
     }
 }
 </style>

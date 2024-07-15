@@ -6,11 +6,7 @@
                 <div class="input-box">
                     <span class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-<<<<<<< HEAD
-                            <path d="M437.332 80H74.668C51.199 80 32 99.198 32 122.667v266.666C32 412.802 51.199 432 74.668 432h362.664C460.801 432 480 412.802 480 389.333V122.667C480 99.198 460.801 80 437.332 80zM432 170.667L256 288 80 170.667V128l176 117.333L432 128v42.667z"/>
-=======
                             <path d="M256 256c52.805 0 96-43.201 96-96s-43.195-96-96-96-96 43.201-96 96 43.195 96 96 96zm0 48c-63.598 0-192 32.402-192 96v48h384v-48c0-63.598-128.402-96-192-96z"/>
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
                         </svg>
                     </span>
                     <input type="text" v-model="login_input" @focus="onLoginFocus" @blur="handBlurLogin" id="user_login" name="user_login">
@@ -37,11 +33,7 @@
                     </label>
                     <a>Забыли пароль?</a>
                 </div>
-<<<<<<< HEAD
-                <button type="button" class="box__btn">Войти</button>
-=======
                 <button type="button" class="box__btn" @click="logUserInSys">Войти</button>
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
                 <div class="box__log-reg">
                     <p>Ещё нет аккаунта?</p>
                     <a @click="openRegForm">Зарегистрироваться!</a>
@@ -101,12 +93,6 @@
 </template>
 
 <script>
-<<<<<<< HEAD
-import CryptoJS from 'crypto-js';
-
-
-=======
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
 export default {
     data() {
         return {
@@ -118,11 +104,7 @@ export default {
             label_pswd_top: '',
             label_login_top: '',
             pswdIsVisible: false,
-<<<<<<< HEAD
-            isLoginForm: false
-=======
             isLoginForm: true
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
         }
     },
     methods: {
@@ -166,11 +148,6 @@ export default {
             }, 2000 )
         },
         async addUserInSys() {
-<<<<<<< HEAD
-            const hash = CryptoJS.SHA256( this.pswd_input );
-
-=======
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
             const payload = [
                 {
                     login: this.login_input,
@@ -183,18 +160,6 @@ export default {
             await this.$store.dispatch( 'addUser', payload );
             
             if( this.$store.getters.getAuthStatus ) {
-<<<<<<< HEAD
-                this.$router.push('/confirm');
-            }
-        },
-        async logUserInSys() {
-            const hash = CryptoJS.SHA256( this.pswd_input );
-
-            const payload = [
-                {
-                    login: this.login_input,
-                    pswd: hash.toString(CryptoJS.enc.Hex)
-=======
                 this.$router.push('/authorization/confirm');
             }
         },
@@ -203,20 +168,14 @@ export default {
                 {
                     login: this.login_input,
                     password: this.pswd_input
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
                 },
                 this.remember_me 
             ];
 
             await this.$store.dispatch( 'identificationUser', payload );
 
-<<<<<<< HEAD
-            if( this.$store.getters.getAuthStatus ) {
-                this.$router.push('/authorization/confirm');
-=======
             if( this.$store.getters.getValidStatus ) {
                 this.$router.push('/client');
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
             }
         }
     }

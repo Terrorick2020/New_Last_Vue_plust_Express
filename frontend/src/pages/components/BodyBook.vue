@@ -1,13 +1,5 @@
 <template>
     <div class="book-body">
-<<<<<<< HEAD
-        <div class="book-body__text">
-            <h1>{{ getTitleTargetBook }}</h1>
-            <hr>
-            <h6>"{{ getDiscriptionTargetBook }}"</h6>
-            <hr>
-            <pre>{{ getTextTargetBook }}</pre>
-=======
         <div v-if="getAbilityEdit" class="book-body__text">
             <div class="text__title">
                 <div v-if="edit_title"  class="title__form-edit">
@@ -117,7 +109,6 @@
                     <pre v-else>Пусто!</pre>
                 </div>
             </div>
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
         </div>
     </div>
 </template>
@@ -126,15 +117,6 @@
 export default {
     computed: {
         getTitleTargetBook() {
-<<<<<<< HEAD
-            return this.$store.getters.getTitleTargetBook
-        },
-        getDiscriptionTargetBook() {
-            return this.$store.getters.getDiscriptionTargetBook
-        },
-        getTextTargetBook() {
-            return this.$store.getters.getTextTargetBook
-=======
             return this.$store.getters.getTitleTargetBook;
         },
         getDescriptionTargetBook() {
@@ -228,15 +210,12 @@ export default {
             this.text_style = 'padding: 0 40px 0 0';
             this.edit_text = !this.edit_text;
             this.new_text = null;
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-<<<<<<< HEAD
-=======
 .edit__btn {
     border: 0;
     outline: 0;
@@ -259,7 +238,6 @@ textarea {
     resize: vertical;
 }
 
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
 .book-body {
     margin-top: 250px;
 
@@ -270,28 +248,6 @@ textarea {
         background-blend-mode: multiply;
         background: rgba(255, 255, 255, 0.75);
 
-<<<<<<< HEAD
-        h1 {
-            font-size: 50px;
-            text-align: center;
-            text-decoration: underline;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-
-        h6 {
-            margin-top: 20px;
-            font-size: 20px;
-            padding-bottom: 10px;
-        }
-
-        pre {
-            margin-top: 50px;
-            font-size: 15px;
-            text-wrap: wrap;
-            
-        }
-=======
         .text__title {
             position: relative;
             min-height: 4lvh;
@@ -451,7 +407,6 @@ textarea {
                 }
             }
         } 
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
     }
 }
 </style>

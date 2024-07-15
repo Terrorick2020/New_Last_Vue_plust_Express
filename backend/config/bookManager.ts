@@ -11,12 +11,8 @@ export default {
             if (res.rows.length > 0) {
                 return {
                     result: 'success',
-<<<<<<< HEAD
                     data: res.rows[0],
                     id: res.rows[0].id
-=======
-                    data: res.rows[0]
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
                 };
             } else {
                 return {
@@ -33,15 +29,10 @@ export default {
 
     delete_book: async (pool: Pool, bookData: { schema: string, id: number }) => {
         try {
-<<<<<<< HEAD
-            const queryText = `DELETE FROM ${bookData.schema} WHERE id = $1 RETURNING *`;
-            const values = [bookData.id];
-=======
             const queryText1 = `DELETE FROM book_texts WHERE book_id = $1 RETURNING *`;
             const queryText = `DELETE FROM ${bookData.schema} WHERE id = $1 RETURNING *`;
             const values = [bookData.id];
             const res1 = await pool.query(queryText1, values);
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
             const res = await pool.query(queryText, values);
     
             
@@ -53,13 +44,9 @@ export default {
             } else {
                 return {
                     result: 'error',
-<<<<<<< HEAD
-                    code: 'failed_delete_book'
-=======
                     code: 'failed_delete_book',
                     res: res,
                     res1: res1
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
                 };
             }
         } catch (error) {
@@ -127,11 +114,6 @@ export default {
             const queryText = `SELECT * FROM ${bookData.schema} WHERE id = $1`;
             const values = [bookData.id];
             const res = await pool.query(queryText, values);
-<<<<<<< HEAD
-            
-=======
-
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
             if (res.rows.length > 0) {
                 return {
                     result: 'success',
