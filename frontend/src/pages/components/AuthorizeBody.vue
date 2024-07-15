@@ -104,7 +104,7 @@ export default {
             label_pswd_top: '',
             label_login_top: '',
             pswdIsVisible: false,
-            isLoginForm: false
+            isLoginForm: true
         }
     },
     methods: {
@@ -174,7 +174,7 @@ export default {
 
             await this.$store.dispatch( 'identificationUser', payload );
 
-            if( this.$store.getters.getValidStatus && this.$store.getters.getTokenStatus ) {
+            if( this.$store.getters.getValidStatus ) {
                 this.$router.push('/client');
             }
         }

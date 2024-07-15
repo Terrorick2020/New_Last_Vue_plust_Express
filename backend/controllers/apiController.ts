@@ -38,10 +38,10 @@ export default {
                 };
                 let AccessToken = jwt.signAccessToken(payload);
                 let RefreshToken = jwt.signRefreshToken(payload);
-                // console.log(AccessToken);
-                // console.log(RefreshToken);
+                console.log(AccessToken);
+                console.log(RefreshToken);
                 res.status(200).cookie('Access', AccessToken, { maxAge: 9000000, httpOnly: true, secure: true })
-                .cookie('Refresh', RefreshToken, { maxAge: 9000000, httpOnly: true, secure: true }).send({AccessToken:AccessToken, role:payload.role});
+                .cookie('Refresh', RefreshToken, { maxAge: 9000000, httpOnly: true, secure: true }).send({payload});
             } else {
                 res.status(401).json({ 'result': 'authorization_error' });
             }
@@ -79,9 +79,9 @@ export default {
                 let RefreshToken = jwt.signRefreshToken(payload);
                 await sendConfirmationEmail( user_config.email, RefreshToken );
                 res.status(200).cookie('Access', AccessToken, { maxAge: 9000000, httpOnly: true, secure: true })
-                .cookie('Refresh', RefreshToken, { maxAge: 9000000, httpOnly: true, secure: true }).send({AccessToken});
+                .cookie('Refresh', RefreshToken, { maxAge: 9000000, httpOnly: true, secure: true }).end();
 
-                
+                // res.status(200).json({ 'result': 'success', 'AccessToken': AccessToken, 'RefreshToken': RefreshToken });
             } else {
                 res.status(401).json({ 'result': 'registration_error', 'code': result.code });
             }

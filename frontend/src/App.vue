@@ -43,4 +43,8 @@ a {
     font-weight: 500;
     cursor: pointer;
 }
+
+button {
+    cursor: pointer;
+}
 </style>

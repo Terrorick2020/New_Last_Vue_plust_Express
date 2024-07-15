@@ -1,5 +1,6 @@
 import { Pool } from 'pg';
 
+
 export default {
     add_book: async (pool: Pool, bookData: { schema: string, title: string, publication: string, year: number, author_name: string, description: string, user_id: number }) => { 
         try {
@@ -27,11 +28,13 @@ export default {
 
     delete_book: async (pool: Pool, bookData: { schema: string, id: number }) => {
         try {
+            const queryText1 = `DELETE FROM book_texts WHERE book_id = $1 RETURNING *`;
             const queryText = `DELETE FROM ${bookData.schema} WHERE id = $1 RETURNING *`;
             const values = [bookData.id];
+            const res1 = await pool.query(queryText1, values);
             const res = await pool.query(queryText, values);
     
-            // Check if res is not null and res.rowCount is greater than 0
+            
             if (res && res.rowCount && res.rowCount > 0) {
                 return {
                     result: 'success',
@@ -40,7 +43,9 @@ export default {
             } else {
                 return {
                     result: 'error',
-                    code: 'failed_delete_book'
+                    code: 'failed_delete_book',
+                    res: res,
+                    res1: res1
                 };
             }
         } catch (error) {

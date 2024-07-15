@@ -1,5 +1,5 @@
 <template>
-    <AccountHeader :nav_attr="nav_attr" :btn_name="btn_name" />
+    <AccountHeader :nav_attr="nav_attr" :searchFunction="searchFunction" :btn_name="btn_name" />
     <div class="book">
         <BodyBook />
         <Footer />
@@ -38,7 +38,10 @@ export default {
             btn_name: {
                 name: 'Назад',
                 path: '/client'
-            }
+            },
+            searchFunction: () => {
+                console.log( 'В разработке!' )
+            },
         }
     }
 }

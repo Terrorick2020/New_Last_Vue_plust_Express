@@ -28,8 +28,11 @@ export default {
                     }
                 });
 
-                if( response.data.AccessToken && response.status === 200 ) {
-                    payload.push( response.data );
+                console.log( response )
+
+                if( response.status === 200 ) {
+                    payload.push( response.data.payload );
+                    console.log( payload );
                     context.commit( 'updateUserInfo', payload );
                     context.commit( 'updateValid' );
                 }
@@ -67,11 +70,11 @@ export default {
 
             state.user_info.username = payload[0].login;
             state.user_info.email = payload[0].email;
-            state.user_info.role = payload[0].role ? payload[0].role : payload[2].role;
 
             state.user_info.remember_me = payload[1];
 
-            state.user_info.AccessToken = payload[2].AccessToken;
+            state.user_info.user_id = payload[2].id;
+            state.user_info.role = payload[2].role ? payload[2].role : ['USER'];
         },
         resetAuth( state ) {
             state.user_info.isAuth = false;
@@ -80,8 +83,6 @@ export default {
             state.user_info = {
                 username: undefined,
                 email: undefined,
-                AccessToken: '',
-                RefreshToken: '',
                 role: undefined,
                 remember_me: undefined,
                 isAuth: false,
@@ -90,18 +91,15 @@ export default {
             state.user_icon = undefined;
         },
         updateValid( state ) {
-            if( !state.user_info.isValid ) {
-                state.user_info.isAuth = false;
-                state.user_info.isValid = true;
-            }
+            state.user_info.isAuth = false;
+            state.user_info.isValid = true;
         }
     },
     state: {
         user_info: {
-            username: undefined,
+            username: 'Goest',
+            user_id:  null,
             email: undefined,
-            AccessToken: '',
-            RefreshToken: '',
             role: undefined,
             remember_me: undefined,
             isAuth: false,
@@ -112,8 +110,9 @@ export default {
     getters: {
         getUserName: state => state.user_info.username,
         getUserIcon: state => state.user_icon,
+        getUserId: state => state.user_info.user_id,
+        getAbilityEdit: state => state.user_info.role.includes( 'USER' ) && state.user_info.role.includes( 'ADMIN' ),
         getValidStatus: state => state.user_info.isValid,
-        getAuthStatus: state => state.user_info.isAuth,
-        getTokenStatus: state => Boolean( state.user_info.AccessToken )
+        getAuthStatus: state => state.user_info.isAuth
     }
 }

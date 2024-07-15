@@ -1,5 +1,5 @@
 <template>
-    <AccountHeader :nav_attr="nav_attr" :btn_name="btn_name" @update:globalQuery="handlerQuery" />
+    <AccountHeader :nav_attr="nav_attr" :btn_name="btn_name" :searchFunction="searchFunction" @update:globalQuery="handlerQuery" />
     <div class="client">
         <Books :globalQuery="globalQuery" />
         <Footer />
@@ -13,7 +13,11 @@ import Footer from './components/Footer.vue';
 
 
 export default {
+    name: 'Account',
     components: { AccountHeader, Books, Footer },
+    mounted() {
+        this.loadBooks()
+    },
     data() {
         return {
             nav_attr: [
@@ -39,12 +43,23 @@ export default {
                 name: 'Главная',
                 path: '/authorization'
             },
+            searchFunction: () => {
+                document.getElementById("book__title").scrollIntoView({ behavior: 'smooth' });
+            },
             globalQuery: undefined
         }
     },
     methods: {
         handlerQuery(newQuery) {
             this.globalQuery = newQuery;
+        },
+        async loadBooks() {
+            try {
+                await this.$store.dispatch( 'loadBooks' );
+            } catch ( error ) {
+                console.error( `Возникла ошибки при подгрушзке данных на страницу!` );
+                console.info( error );
+            }
         }
     }
 }

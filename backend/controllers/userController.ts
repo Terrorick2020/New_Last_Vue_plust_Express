@@ -43,9 +43,7 @@ export default {
     verifyMail: async (req: Request, res: Response) => {
         try {
             const RefreshToken = req.params.token;
-            
-            const UserId = await jwt.verifyRefreshTokenFromMail(RefreshToken);7
-            
+            const UserId = await jwt.verifyRefreshTokenFromMail(RefreshToken);
             req.body.id = UserId;
             user_config = { ...user_config, ...req.body };
             const pool = await db_connection.connectToPostgresDB(pool_config);
@@ -89,10 +87,10 @@ export default {
             if (result.result === 'success') {
     
                 res.status(200).json({ 'result': 'success', 'isvalid': result.isvalid });
-
             } else {
                 res.status(401).json({ 'result': 'verify_error', 'code': result.code });
             }
+
             
         } catch (error) {
             console.error(`Возникла ошибка с контроллером при попытке подтверждения почты!`);

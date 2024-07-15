@@ -21,6 +21,7 @@ async function createTable(client) {
         await client.query(`
             DROP TABLE IF EXISTS users;
             DROP TABLE IF EXISTS books;
+            DROP TABLE IF EXISTS book_texts;
             create TABLE users(
     id SERIAL PRIMARY KEY,
     login VARCHAR(255),
@@ -38,6 +39,13 @@ create TABLE books(
     description TEXT,
     user_id INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+create TABLE book_texts(
+    id SERIAL PRIMARY KEY,
+    book_text TEXT,
+    book_id INTEGER NOT NULL,
+    FOREIGN KEY (book_id) REFERENCES books (id)
 );
         `);
         console.log("Таблица успешно создана");
