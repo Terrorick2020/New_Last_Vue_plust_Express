@@ -20,10 +20,7 @@
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
-<<<<<<< HEAD
-=======
     "cookie-parser": "^1.4.6",
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
     "copy-webpack-plugin": "^12.0.2",
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
@@ -64,10 +61,6 @@
     "@types/node": "^20.14.5",
     "@types/pg": "^8.11.6",
     "@types/redis": "^4.0.11",
-<<<<<<< HEAD
-    "cookie-parser": "^1.4.6",
-=======
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
     "css-loader": "^7.1.2",
     "ioredis": "^5.4.1",
     "jsonwebtoken": "^9.0.2",

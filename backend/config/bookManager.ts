@@ -29,10 +29,9 @@ export default {
 
     delete_book: async (pool: Pool, bookData: { schema: string, id: number }) => {
         try {
-            const queryText1 = `DELETE FROM book_texts WHERE book_id = $1 RETURNING *`;
             const queryText = `DELETE FROM ${bookData.schema} WHERE id = $1 RETURNING *`;
             const values = [bookData.id];
-            const res1 = await pool.query(queryText1, values);
+
             const res = await pool.query(queryText, values);
     
             
@@ -45,8 +44,6 @@ export default {
                 return {
                     result: 'error',
                     code: 'failed_delete_book',
-                    res: res,
-                    res1: res1
                 };
             }
         } catch (error) {

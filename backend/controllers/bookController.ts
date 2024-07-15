@@ -59,14 +59,8 @@ export default {
 
             let result = await bookManager.getBookByID(pool, book_config);
             let result_text = await bigBookManager.getBigBookByID(pool, big_book_config);
-<<<<<<< HEAD
-            if (result_text && result_text.result === 'success') {result = { ...result, ...result_text };}
-=======
-            if (result_text && result_text.result === 'success') {
-                result = { ...result, ...result_text };
-            }
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
-            
+
+            result.data = { ...result.data, ...{text:result_text.data.book_text} };            
 
 
             if (result.result === 'success') {
@@ -86,13 +80,9 @@ export default {
         try {
             const { text, ...bodyWithoutText } = req.body;
             book_config = { ...book_config, ...bodyWithoutText };
-<<<<<<< HEAD
-            big_book_config = { ...big_book_config, ...{book_text:text} };
-            console.log(text)
-=======
-            big_book_config = { ...big_book_config, ...text }
+            big_book_config = { ...big_book_config, ...{book_text:text} }
+            
 
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
             const pool = await db_connection.connectToPostgresDB(pool_config);
 
             if (!pool) {
@@ -100,12 +90,10 @@ export default {
             }
 
             let result = await bookManager.add_book(pool, book_config);
-<<<<<<< HEAD
-            big_book_config = { ...big_book_config, ...{book_id:result.data.id} };
-=======
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
+            big_book_config = { ...big_book_config, ...{book_id:result.id} }
             let result_text = await bigBookManager.add_big_book(pool, big_book_config);
-            result = { ...result, ...result_text };
+            result.data = { ...result.data, ...{text:result_text.data.book_text} };
+
 
             if (result.result === 'success') {
                 res.status(200).json(result);
@@ -131,19 +119,16 @@ export default {
             if (!pool) {
                 throw Error(`Возникла ошибка: объект pool: ${pool}! Не получается подключиться к бд: PostgreSQL!`);
             }
-
-            let result = await bookManager.delete_book(pool, book_config);
+            console.log(big_book_config)
             let result_text = await bigBookManager.delete_big_book(pool, big_book_config);
-            result = { ...result, ...result_text };
+            let result = await bookManager.delete_book(pool, book_config);
+            
+            result.data = { ...result.data, ...{text:result_text.data.book_text} };
 
             if (result.result === 'success') {
                 res.status(200).json(result);
             } else {
-<<<<<<< HEAD
-                res.status(400).json({ 'result': 'book_error', 'code': result.code });
-=======
                 res.status(400).json({ 'result': 'book_error', 'code': result.code, 'res': result.res, 'res1': result.res1 });
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
             }
         } catch (error) {
             console.error(`Возникла ошибка с контроллером при попытке удаления книги!`);

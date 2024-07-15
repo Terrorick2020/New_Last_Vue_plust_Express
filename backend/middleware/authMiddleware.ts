@@ -9,16 +9,7 @@ export default function (roles: Array<string>) {
         }
 
         try {
-<<<<<<< HEAD
-            const authHeader = req.cookies.AccessToken;
-            if (!authHeader) {
-                return res.status(403).json({ message: 'Пользователь не авторизован' });
-            }
-
-            const token = authHeader.split(' ')[1];
-=======
             const token = req.cookies.Access;     
->>>>>>> 904697ebfb63044cc2194402ea078b59c32d7d36
             
             if (!token) {
                 return res.status(403).json({ message: 'Пользователь не авторизован' });

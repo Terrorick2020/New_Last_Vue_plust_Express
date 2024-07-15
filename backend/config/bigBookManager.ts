@@ -25,12 +25,12 @@ export default {
         }
     },
 
-    delete_big_book: async (pool: Pool, bigBookData: { schema: string, book_id: number }) => {
+    delete_big_book: async (pool: Pool, bigBookData: { schema: string, id: number }) => {
         try {
             const queryText = `DELETE FROM ${bigBookData.schema} WHERE book_id = $1 RETURNING *`;
-            const values = [bigBookData.book_id];
+            const values = [bigBookData.id];
             const res = await pool.query(queryText, values);
-    
+            console.log(res)
             
             if (res && res.rowCount && res.rowCount > 0) {
                 return {
@@ -49,43 +49,11 @@ export default {
             return {result: 'error'};
         }
     },
-
-    // update_big_book: async (pool: Pool, bookId: number, updates: { [key: string]: any }) => {
-    //     try {
-    //         const keys = Object.keys(updates);
-    //         const values = Object.values(updates);
-    //         values.push(bookId); 
     
-    //         const setClause = keys.map((key, index) => `${key} = $${index + 1}`).join(', ');
-    
-    //         const queryText = `UPDATE books SET ${setClause} WHERE book_id = $${keys.length + 1} RETURNING *`;
-    
-    //         const res = await pool.query(queryText, values);
-     
-    //         if (res.rows.length > 0) {
-    //             return {
-    //                 result: 'success',
-    //                 data: res.rows[0]
-    //             };
-    //         } else {
-    //             return {
-    //                 result: 'error',
-    //                 code: 'failed_update_book'
-    //             };
-    //         }
-    //     } catch (error) {
-    //         console.error('Возникла ошибка при работе с БД: PostgreSQL');
-    //         console.error(error);
-    //         return { result: 'error' };
-    //     }
-    // },
-
-    
-
-    getBigBookByID: async (pool: Pool, bigBookData: { schema: string, book_id: number }) => {
+    getBigBookByID: async (pool: Pool, bigBookData: { schema: string, id: number }) => {
         try {
             const queryText = `SELECT * FROM ${bigBookData.schema} WHERE book_id = $1`;
-            const values = [bigBookData.book_id];
+            const values = [bigBookData.id];
             const res = await pool.query(queryText, values);
 
             if (res.rows.length > 0) {

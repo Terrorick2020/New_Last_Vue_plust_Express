@@ -12,8 +12,7 @@ router.get('/books/:id', userController.getBookByID);
 
 router.post('/books', authMiddleware(['ADMIN']), userController.addBook);
 
-// router.put('/books/:id', authMiddleware(['ADMIN']), userController.updateBook);
-router.put('/books/:id', userController.updateBook);
+router.put('/books/:id', authMiddleware(['ADMIN']), userController.updateBook);
 
 router.delete('/books/:id', authMiddleware(['ADMIN']), userController.deleteBook);
 
