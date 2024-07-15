@@ -59,7 +59,8 @@ export default {
 
             let result = await bookManager.getBookByID(pool, book_config);
             let result_text = await bigBookManager.getBigBookByID(pool, big_book_config);
-            result = { ...result, ...result_text };
+            if (result_text && result_text.result === 'success') {result = { ...result, ...result_text };}
+            
 
 
             if (result.result === 'success') {
@@ -79,8 +80,8 @@ export default {
         try {
             const { text, ...bodyWithoutText } = req.body;
             book_config = { ...book_config, ...bodyWithoutText };
-            big_book_config = { ...big_book_config, ...text }
-
+            big_book_config = { ...big_book_config, ...{book_text:text} };
+            console.log(text)
             const pool = await db_connection.connectToPostgresDB(pool_config);
 
             if (!pool) {
@@ -88,6 +89,7 @@ export default {
             }
 
             let result = await bookManager.add_book(pool, book_config);
+            big_book_config = { ...big_book_config, ...{book_id:result.data.id} };
             let result_text = await bigBookManager.add_big_book(pool, big_book_config);
             result = { ...result, ...result_text };
 

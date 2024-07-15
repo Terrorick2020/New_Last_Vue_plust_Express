@@ -11,7 +11,8 @@ export default {
             if (res.rows.length > 0) {
                 return {
                     result: 'success',
-                    data: res.rows[0]
+                    data: res.rows[0],
+                    id: res.rows[0].id
                 };
             } else {
                 return {
@@ -109,7 +110,7 @@ export default {
             const queryText = `SELECT * FROM ${bookData.schema} WHERE id = $1`;
             const values = [bookData.id];
             const res = await pool.query(queryText, values);
-
+            
             if (res.rows.length > 0) {
                 return {
                     result: 'success',
