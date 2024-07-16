@@ -11,8 +11,7 @@ export default {
             if (res.rows.length > 0) {
                 return {
                     result: 'success',
-                    data: res.rows[0],
-                    id: res.rows[0].id
+                    data: res.rows[0]
                 };
             } else {
                 return {

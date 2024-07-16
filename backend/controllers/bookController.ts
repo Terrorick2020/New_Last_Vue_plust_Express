@@ -90,7 +90,7 @@ export default {
             }
 
             let result = await bookManager.add_book(pool, book_config);
-            big_book_config = { ...big_book_config, ...{book_id:result.id} }
+            big_book_config = { ...big_book_config, ...{book_id:result.data.id} }
             let result_text = await bigBookManager.add_big_book(pool, big_book_config);
             result.data = { ...result.data, ...{text:result_text.data.book_text} };
 
@@ -119,7 +119,7 @@ export default {
             if (!pool) {
                 throw Error(`Возникла ошибка: объект pool: ${pool}! Не получается подключиться к бд: PostgreSQL!`);
             }
-            console.log(big_book_config)
+
             let result_text = await bigBookManager.delete_big_book(pool, big_book_config);
             let result = await bookManager.delete_book(pool, book_config);
             
@@ -146,15 +146,25 @@ export default {
             if (!Object.keys(updates).length) {
                 return res.status(400).json({ 'result': 'book_error', 'code': 'no_update_data' });
             }
-    
+            
             const pool = await db_connection.connectToPostgresDB(pool_config);
     
             if (!pool) {
                 throw Error(`Возникла ошибка: объект pool: ${pool}! Не получается подключиться к бд: PostgreSQL!`);
             }
-    
-            const result = await bookManager.update_book(pool, bookId, updates);
-    
+            
+            let result;
+
+            if (updates.text !== undefined) {
+                const { text, ...bodyWithoutText } = updates;
+                result = await bookManager.update_book(pool, bookId, bodyWithoutText);
+                const bigUpdates = {book_text: text};
+                const result_text = await bigBookManager.update_book(pool, bookId, bigUpdates);
+                result.data = { ...result.data, ...{text:result_text.data.book_text} };
+            } else {
+                result = await bookManager.update_book(pool, bookId, updates);
+            }
+
             if (result.result === 'success') {
                 res.status(200).json(result);
             } else {

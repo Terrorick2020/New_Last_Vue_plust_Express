@@ -72,5 +72,35 @@ export default {
             console.error(error);
             return {result: 'error'};
         }
+    },
+
+    update_book: async (pool: Pool, bookId: number, updates: { [key: string]: any }) => {
+        try {
+            const keys = Object.keys(updates);
+            const values = Object.values(updates);
+            values.push(bookId); 
+    
+            const setClause = keys.map((key, index) => `${key} = $${index + 1}`).join(', ');
+    
+            const queryText = `UPDATE book_texts SET ${setClause} WHERE book_id = $${keys.length + 1} RETURNING *`;
+    
+            const res = await pool.query(queryText, values);
+     
+            if (res.rows.length > 0) {
+                return {
+                    result: 'success',
+                    data: res.rows[0]
+                };
+            } else {
+                return {
+                    result: 'error',
+                    code: 'failed_update_book'
+                };
+            }
+        } catch (error) {
+            console.error('Возникла ошибка при работе с БД: PostgreSQL');
+            console.error(error);
+            return { result: 'error' };
+        }
     }
 };
