@@ -142,7 +142,8 @@ export default {
         try {
             const bookId = Number(req.params.id);
             const updates = req.body;
-            
+            const { text, ...bodyWithoutText } = updates;
+
             if (!Object.keys(updates).length) {
                 return res.status(400).json({ 'result': 'book_error', 'code': 'no_update_data' });
             }
@@ -155,21 +156,33 @@ export default {
             
             let result;
 
-            if (updates.text !== undefined) {
-                const { text, ...bodyWithoutText } = updates;
-                result = await bookManager.update_book(pool, bookId, bodyWithoutText);
+            if (!Object.keys(bodyWithoutText).length) {
                 const bigUpdates = {book_text: text};
                 const result_text = await bigBookManager.update_book(pool, bookId, bigUpdates);
+                if (result_text.result === 'success') {
+                    res.status(200).json(result_text);
+                } else {
+                    res.status(400).json({ 'result': 'book_error', 'code': result_text.code });
+                }
+            } else if (Object.keys(bodyWithoutText).length && updates.text !== undefined) {
+                const bigUpdates = {book_text: text};
+                const result_text = await bigBookManager.update_book(pool, bookId, bigUpdates);
+                result = await bookManager.update_book(pool, bookId, bodyWithoutText);
                 result.data = { ...result.data, ...{text:result_text.data.book_text} };
+                if (result.result === 'success') {
+                    res.status(200).json(result);
+                } else {
+                    res.status(400).json({ 'result': 'book_error', 'code': result.code });
+                }
             } else {
                 result = await bookManager.update_book(pool, bookId, updates);
+                if (result.result === 'success') {
+                    res.status(200).json(result);
+                } else {
+                    res.status(400).json({ 'result': 'book_error', 'code': result.code });
+                }
             }
 
-            if (result.result === 'success') {
-                res.status(200).json(result);
-            } else {
-                res.status(400).json({ 'result': 'book_error', 'code': result.code });
-            }
         } catch (error) {
             console.error(`Возникла ошибка с контроллером при попытке обновления книги!`);
             const err = error as Error;
